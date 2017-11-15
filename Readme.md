@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Владимир Шкерин](https://up.htmlacademy.ru/javascript/11/user/410531).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Дудкин](https://up.htmlacademy.ru/javascript/11/user/565179).
 
 ---
 
