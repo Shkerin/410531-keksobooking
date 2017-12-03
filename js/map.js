@@ -68,7 +68,7 @@
       var arr = [];
 
       var rand = getRandomInt(0, features.length - 1);
-      for (i = 0; i < rand; i++) {
+      for (var k = 0; k < rand; k++) {
         arr.push(features[getRandomInt(0, features.length - 1)]);
       }
 
@@ -76,7 +76,7 @@
     };
 
     var mapPins = [];
-    for (i = 0; i < announMax; i++) {
+    for (var j = 0; j < announMax; j++) {
       var locationX = getRandomInt(300, 900);
       var locationY = getRandomInt(100, 500);
       var rooms = getRandomInt(1, 5);
