@@ -169,15 +169,35 @@
   };
 
   var removeClass = function (selector, className) {
-    var el = document.querySelector(selector);
-    if (el !== null) {
-      el.classList.remove(className);
+    var elem = document.querySelector(selector);
+    if (elem !== null) {
+      elem.classList.remove(className);
     }
   };
 
-  removeClass('.map', 'map--faded');
+  var removeAttribute = function (selector, attribute) {
+    var elem = document.querySelector(selector);
+    if (elem) {
+      elem.removeAttribute(attribute);
+    }
+  };
 
-  var mapPins = createMapPins(8);
-  renderMapPins(mapPins);
-  renderMapCard(mapPins[0]);
+  var removeAttributeAll = function (selector, attribute) {
+    var elems = document.querySelectorAll(selector);
+    for (var i = 0; i < elems.length; i++) {
+      elems[i].removeAttribute(attribute);
+    }
+  };
+
+  var mapPinElem = document.querySelector('.map__pin--main');
+  mapPinElem.addEventListener('mouseup', function () {
+    removeClass('.map', 'map--faded');
+    removeClass('.map__filters', 'notice__form--disabled');
+    removeAttributeAll('.map__filter', 'disabled');
+    removeAttribute('.map__filter-set', 'disabled');
+
+    var mapPins = createMapPins(8);
+    renderMapPins(mapPins);
+    renderMapCard(mapPins[0]);
+  });
 })();
