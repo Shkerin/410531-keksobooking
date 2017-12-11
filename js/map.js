@@ -113,8 +113,8 @@
 
     for (var i = 0; i < mapPins.length; i++) {
       var pin = mapPins[i];
-      var locationX = pin.location.x + 20;
-      var locationY = pin.location.y + 62;
+      var locationX = pin.location.x - 46 / 2;
+      var locationY = pin.location.y - 64;
       var avatar = pin.author.avatar;
 
       var pinElem = document.createElement('div');
