@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var ENTER_KEYCODE = 13;
+
+  var ESC_KEYCODE = 27;
+
   var isNumeric = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   };
@@ -164,24 +168,30 @@
         '<img src="' + avatar + '" width="40" height="40" draggable="false">' +
         '</button>';
 
+      pinElem.addEventListener('keydown', function (evt) {
+        if (evt.keyCode === ENTER_KEYCODE) {
+          showPopup(pinElem);
+        }
+      });
+
       frag.appendChild(pinElem);
     }
 
     document.querySelector('.map__pins').appendChild(frag);
   };
 
-  var updatePopup = function (popup, pin) {
+  var updatePopup = function (elem, pin) {
     var offer = pin.offer;
 
-    popup.querySelector('.popup__avatar').setAttribute('src', pin.avatar);
-    popup.querySelector('h3').textContent = offer.title;
-    popup.querySelector('p > small').textContent = offer.address;
-    popup.querySelector('.popup__price').innerHTML = offer.price + '&#x20bd;/ночь';
-    popup.querySelector('ul + p').textContent = offer.description;
-    popup.querySelector('.popup__avatar').setAttribute('src', pin.author.avatar);
-    popup.querySelector('h4 + p').textContent =
+    elem.querySelector('.popup__avatar').setAttribute('src', pin.avatar);
+    elem.querySelector('h3').textContent = offer.title;
+    elem.querySelector('p > small').textContent = offer.address;
+    elem.querySelector('.popup__price').innerHTML = offer.price + '&#x20bd;/ночь';
+    elem.querySelector('ul + p').textContent = offer.description;
+    elem.querySelector('.popup__avatar').setAttribute('src', pin.author.avatar);
+    elem.querySelector('h4 + p').textContent =
       offer.rooms + ' для ' + offer.guests + ' гостей';
-    popup.querySelector('h4 + p + p').textContent =
+    elem.querySelector('h4 + p + p').textContent =
       'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
 
     // Заполнение типа жилья
@@ -190,10 +200,10 @@
       'bungalo': 'Бунгало',
       'house': 'Дом'
     };
-    popup.querySelector('h4').textContent = pinTypes[offer.type];
+    elem.querySelector('h4').textContent = pinTypes[offer.type];
 
     // Заполнение удобств в квартире
-    var featuresElem = popup.querySelector('.popup__features');
+    var featuresElem = elem.querySelector('.popup__features');
     while (featuresElem.children.length) {
       featuresElem.removeChild(featuresElem.lastElementChild);
     }
@@ -215,10 +225,43 @@
 
     var popupCloseElem = document.querySelector('.popup__close');
     popupCloseElem.addEventListener('click', function () {
-      addClass('.popup', 'hidden');
+      hidePopup();
+      if (mapPinActive) {
+        removeClass(mapPinActive, 'map__pin--active');
+      }
     });
   };
 
+  var escKeydownPopupHandler = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      hidePopup();
+    }
+  };
+
+  var showPopup = function (elem) {
+    document.addEventListener('keydown', escKeydownPopupHandler);
+
+    var uid = elem.getAttribute('uid');
+    if (mapPinActive) {
+      var popup = document.querySelector('.popup');
+      updatePopup(popup, mapPins[uid]);
+      removeClass(popup, 'hidden');
+      removeClass(mapPinActive, 'map__pin--active');
+    } else {
+      renderPopup(mapPins[uid]);
+    }
+    addClass(elem, 'map__pin--active');
+
+    mapPinActive = elem;
+  };
+
+  var hidePopup = function () {
+    document.removeEventListener('keydown', escKeydownPopupHandler);
+
+    addClass('.popup', 'hidden');
+  };
+
+  var mapPinActive;
   var mapPins = createMapPins(8);
 
   var mapPinMainElem = document.querySelector('.map__pin--main');
@@ -231,26 +274,12 @@
     renderMapPins(mapPins);
   });
 
-  var mapPinActive;
-
   document.addEventListener('click', function () {
     var elem = document.activeElement;
     if (elem instanceof HTMLElement &&
       elem.classList.contains('map__pin') &&
       !elem.classList.contains('map__pin--main')) {
-
-      var uid = elem.getAttribute('uid');
-      if (mapPinActive) {
-        var popup = document.querySelector('.popup');
-        updatePopup(popup, mapPins[uid]);
-        removeClass(popup, 'hidden');
-        removeClass(mapPinActive, 'map__pin--active');
-      } else {
-        renderPopup(mapPins[uid]);
-        addClass(elem, 'map__pin--active');
-      }
-
-      mapPinActive = elem;
+      showPopup(elem);
     }
   });
 })();
