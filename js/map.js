@@ -32,6 +32,46 @@
     return val;
   };
 
+  var addClass = function (target, className) {
+    if (target instanceof HTMLElement) {
+      target.classList.add(className);
+    } else if (typeof target === 'string') {
+      var elem = document.querySelector(target);
+      if (elem !== null) {
+        elem.classList.add(className);
+      }
+    } else {
+      throw new TypeError('Exception add class: target is not valid type');
+    }
+  };
+
+  var removeClass = function (target, className) {
+    if (target instanceof HTMLElement) {
+      target.classList.remove(className);
+    } else if (typeof target === 'string') {
+      var elem = document.querySelector(target);
+      if (elem !== null) {
+        elem.classList.remove(className);
+      }
+    } else {
+      throw new TypeError('Exception add class: target is not valid type');
+    }
+  };
+
+  var removeAttribute = function (selector, attribute) {
+    var elem = document.querySelector(selector);
+    if (elem) {
+      elem.removeAttribute(attribute);
+    }
+  };
+
+  var removeAttributeAll = function (selector, attribute) {
+    var elems = document.querySelectorAll(selector);
+    for (var i = 0; i < elems.length; i++) {
+      elems[i].removeAttribute(attribute);
+    }
+  };
+
   var createMapPins = function (announMax) {
     var numbers = [];
     for (var i = 0; i < announMax; i++) {
@@ -82,6 +122,7 @@
       var locationY = getRandomInt(100, 500);
       var rooms = getRandomInt(1, 5);
       mapPins.push({
+        'uid': j, // TODO replace to uid
         'author': {
           'avatar': getRandomAvatar()
         },
@@ -119,7 +160,7 @@
 
       var pinElem = document.createElement('div');
       pinElem.innerHTML =
-        '<button style="left: ' + locationX + 'px; top: ' + locationY + 'px;" class="map__pin">' +
+        '<button style="left: ' + locationX + 'px; top: ' + locationY + 'px;" class="map__pin" uid=' + pin.uid + '>' +
         '<img src="' + avatar + '" width="40" height="40" draggable="false">' +
         '</button>';
 
@@ -129,20 +170,18 @@
     document.querySelector('.map__pins').appendChild(frag);
   };
 
-  var renderMapCard = function (pin) {
-    var mapCardTemplate = document.querySelector('template');
-    var mapCard = mapCardTemplate.content.cloneNode(true);
+  var updatePopup = function (popup, pin) {
     var offer = pin.offer;
 
-    mapCard.querySelector('.popup__avatar').setAttribute('src', pin.avatar);
-    mapCard.querySelector('h3').textContent = offer.title;
-    mapCard.querySelector('p > small').textContent = offer.address;
-    mapCard.querySelector('.popup__price').innerHTML = offer.price + '&#x20bd;/ночь';
-    mapCard.querySelector('ul + p').textContent = offer.description;
-    mapCard.querySelector('.popup__avatar').setAttribute('src', pin.author.avatar);
-    mapCard.querySelector('h4 + p').textContent =
+    popup.querySelector('.popup__avatar').setAttribute('src', pin.avatar);
+    popup.querySelector('h3').textContent = offer.title;
+    popup.querySelector('p > small').textContent = offer.address;
+    popup.querySelector('.popup__price').innerHTML = offer.price + '&#x20bd;/ночь';
+    popup.querySelector('ul + p').textContent = offer.description;
+    popup.querySelector('.popup__avatar').setAttribute('src', pin.author.avatar);
+    popup.querySelector('h4 + p').textContent =
       offer.rooms + ' для ' + offer.guests + ' гостей';
-    mapCard.querySelector('h4 + p + p').textContent =
+    popup.querySelector('h4 + p + p').textContent =
       'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
 
     // Заполнение типа жилья
@@ -151,10 +190,10 @@
       'bungalo': 'Бунгало',
       'house': 'Дом'
     };
-    mapCard.querySelector('h4').textContent = pinTypes[offer.type];
+    popup.querySelector('h4').textContent = pinTypes[offer.type];
 
     // Заполнение удобств в квартире
-    var featuresElem = mapCard.querySelector('.popup__features');
+    var featuresElem = popup.querySelector('.popup__features');
     while (featuresElem.children.length) {
       featuresElem.removeChild(featuresElem.lastElementChild);
     }
@@ -163,41 +202,55 @@
       featureElem.className = 'feature feature--' + offer.features[i];
       featuresElem.appendChild(featureElem);
     }
+  };
+
+  var renderPopup = function (pin) {
+    var popupTemplate = document.querySelector('template');
+    var popup = popupTemplate.content.cloneNode(true);
+
+    updatePopup(popup, pin);
 
     var mapFiltersContainer = document.querySelector('.map__filters-container');
-    document.querySelector('.map').insertBefore(mapCard, mapFiltersContainer);
+    document.querySelector('.map').insertBefore(popup, mapFiltersContainer);
+
+    var popupCloseElem = document.querySelector('.popup__close');
+    popupCloseElem.addEventListener('click', function () {
+      addClass('.popup', 'hidden');
+    });
   };
 
-  var removeClass = function (selector, className) {
-    var elem = document.querySelector(selector);
-    if (elem !== null) {
-      elem.classList.remove(className);
-    }
-  };
+  var mapPins = createMapPins(8);
 
-  var removeAttribute = function (selector, attribute) {
-    var elem = document.querySelector(selector);
-    if (elem) {
-      elem.removeAttribute(attribute);
-    }
-  };
-
-  var removeAttributeAll = function (selector, attribute) {
-    var elems = document.querySelectorAll(selector);
-    for (var i = 0; i < elems.length; i++) {
-      elems[i].removeAttribute(attribute);
-    }
-  };
-
-  var mapPinElem = document.querySelector('.map__pin--main');
-  mapPinElem.addEventListener('mouseup', function () {
+  var mapPinMainElem = document.querySelector('.map__pin--main');
+  mapPinMainElem.addEventListener('mouseup', function () {
     removeClass('.map', 'map--faded');
     removeClass('.map__filters', 'notice__form--disabled');
     removeAttributeAll('.map__filter', 'disabled');
     removeAttribute('.map__filter-set', 'disabled');
 
-    var mapPins = createMapPins(8);
     renderMapPins(mapPins);
-    renderMapCard(mapPins[0]);
+  });
+
+  var mapPinActive;
+
+  document.addEventListener('click', function () {
+    var elem = document.activeElement;
+    if (elem instanceof HTMLElement &&
+      elem.classList.contains('map__pin') &&
+      !elem.classList.contains('map__pin--main')) {
+
+      var uid = elem.getAttribute('uid');
+      if (mapPinActive) {
+        var popup = document.querySelector('.popup');
+        updatePopup(popup, mapPins[uid]);
+        removeClass(popup, 'hidden');
+        removeClass(mapPinActive, 'map__pin--active');
+      } else {
+        renderPopup(mapPins[uid]);
+        addClass(elem, 'map__pin--active');
+      }
+
+      mapPinActive = elem;
+    }
   });
 })();
