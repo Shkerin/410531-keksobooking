@@ -267,9 +267,9 @@
   var mapPinMainElem = document.querySelector('.map__pin--main');
   mapPinMainElem.addEventListener('mouseup', function () {
     removeClass('.map', 'map--faded');
-    removeClass('.map__filters', 'notice__form--disabled');
-    removeAttributeAll('.map__filter', 'disabled');
-    removeAttribute('.map__filter-set', 'disabled');
+    removeClass('.notice__form', 'notice__form--disabled');
+    removeAttribute('.notice__header', 'disabled');
+    removeAttributeAll('.form__element', 'disabled');
 
     renderMapPins(mapPins);
   });
