@@ -164,17 +164,17 @@
 
       var pinElem = document.createElement('div');
       pinElem.innerHTML =
-        '<button style="left: ' + locationX + 'px; top: ' + locationY + 'px;" class="map__pin" uid=' + pin.uid + '>' +
+        '<button style="left: ' + locationX + 'px; top: ' + locationY + 'px;" class="map__pin" data-uid=' + pin.uid + '>' +
         '<img src="' + avatar + '" width="40" height="40" draggable="false">' +
         '</button>';
 
+      frag.appendChild(pinElem);
+
       pinElem.addEventListener('keydown', function (evt) {
         if (evt.keyCode === ENTER_KEYCODE) {
-          showPopup(pinElem);
+          showPopup(evt.target);
         }
       });
-
-      frag.appendChild(pinElem);
     }
 
     document.querySelector('.map__pins').appendChild(frag);
@@ -241,14 +241,14 @@
   var showPopup = function (elem) {
     document.addEventListener('keydown', escKeydownPopupHandler);
 
-    var uid = elem.getAttribute('uid');
+    var data = elem.dataset;
     if (mapPinActive) {
       var popup = document.querySelector('.popup');
-      updatePopup(popup, mapPins[uid]);
+      updatePopup(popup, mapPins[data.uid]);
       removeClass(popup, 'hidden');
       removeClass(mapPinActive, 'map__pin--active');
     } else {
-      renderPopup(mapPins[uid]);
+      renderPopup(mapPins[data.uid]);
     }
     addClass(elem, 'map__pin--active');
 
