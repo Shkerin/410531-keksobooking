@@ -282,4 +282,66 @@
       showPopup(elem);
     }
   });
+
+  // Синхранизация полей «время заезда» и «время выезда»
+  var timeInElem = document.querySelector('#timein');
+  var timeOutElem = document.querySelector('#timeout');
+
+  var changeTimeHandler = function (evt) {
+    var target = evt.target;
+    if (target === timeInElem) {
+      timeOutElem.selectedIndex = target.selectedIndex;
+    } else if (evt.target === timeOutElem) {
+      timeInElem.selectedIndex = target.selectedIndex;
+    }
+  };
+
+  timeInElem.addEventListener('change', changeTimeHandler);
+  timeOutElem.addEventListener('change', changeTimeHandler);
+
+  // Синхронизация поля «тип жилья» с минимальной ценой поля «цена за ночь»
+  var typeElem = document.querySelector('#type');
+  var priceElem = document.querySelector('#price');
+
+  var changeTypeHandler = function (evt) {
+    var target = evt.target;
+    switch (target.selectedIndex) {
+      case 0: // квартира
+        priceElem.setAttribute('min', '1000');
+        break;
+      case 1: // лачуга
+        priceElem.setAttribute('min', '0');
+        break;
+      case 2: // дом
+        priceElem.setAttribute('min', '5000');
+        break;
+      case 3: // дворец
+        priceElem.setAttribute('min', '10000');
+    }
+  };
+
+  typeElem.addEventListener('change', changeTypeHandler);
+
+  // Синхронизация поля «количество комнат» с полем «количество мест»
+  var roomNumberElem = document.querySelector('#room_number');
+  var capacityElem = document.querySelector('#capacity');
+
+  var changeRoomNumberHandler = function (evt) {
+    var target = evt.target;
+    switch (target.selectedIndex) {
+      case 0:
+        capacityElem.selectedIndex = 2;
+        break;
+      case 1:
+        capacityElem.selectedIndex = getRandomInt(1, 2);
+        break;
+      case 2:
+        capacityElem.selectedIndex = getRandomInt(0, 2);
+        break;
+      case 3:
+        capacityElem.selectedIndex = 3;
+    }
+  };
+
+  roomNumberElem.addEventListener('change', changeRoomNumberHandler);
 })();
