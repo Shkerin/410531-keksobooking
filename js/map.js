@@ -76,6 +76,10 @@
     }
   };
 
+  var contains = function (arr, elem) {
+    return arr.indexOf(elem) !== -1;
+  };
+
   var createMapPins = function (announMax) {
     var numbers = [];
     for (var i = 0; i < announMax; i++) {
@@ -344,4 +348,44 @@
   };
 
   roomNumberElem.addEventListener('change', changeRoomNumberHandler);
+
+  // Валидация полей
+  var noticeFormElem = document.querySelector('.notice__form');
+  noticeFormElem.addEventListener('submit', function (evt) {
+    var cancelSubmit = function () {
+      for (var i = 0; i < arguments.length; i++) {
+        arguments[i].style = 'border-color: red';
+      }
+      evt.preventDefault();
+      return false;
+    };
+
+    var titleElem = document.querySelector('#title');
+    if (titleElem.value.length < 30 || titleElem.value.length > 100) {
+      cancelSubmit(titleElem.style);
+    }
+
+    var addressElem = document.querySelector('#address');
+    if (addressElem.value.isEmpty) {
+      cancelSubmit(addressElem);
+    }
+
+    if ((typeElem.selectedIndex === 0 && priceElem.value < 1000) ||
+      (typeElem.selectedIndex === 1 && priceElem.value < 0) ||
+      (typeElem.selectedIndex === 2 && priceElem.value < 5000) ||
+      (typeElem.selectedIndex === 3 && priceElem.value < 10000)) {
+      cancelSubmit(typeElem, priceElem);
+    }
+
+    if (timeInElem.selectedIndex !== timeOutElem.selectedIndex) {
+      cancelSubmit(timeInElem, timeOutElem);
+    }
+
+    if ((roomNumberElem.selectedIndex === 0 && capacityElem.selectedIndex !== 2) ||
+      (roomNumberElem.selectedIndex === 1 && !contains([1, 2], capacityElem.selectedIndex)) ||
+      (roomNumberElem.selectedIndex === 2 && !contains([0, 1, 2], capacityElem.selectedIndex)) ||
+      (roomNumberElem.selectedIndex === 3 && capacityElem.selectedIndex !== 3)) {
+      cancelSubmit(roomNumberElem, capacityElem);
+    }
+  });
 })();
