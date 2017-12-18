@@ -12,6 +12,22 @@
     utils.isEscEvent(evt, hidePopup);
   };
 
+  var showPopup = function (elem, mapPins) {
+    var data = elem.dataset;
+    if (mapPinActive) {
+      var popup = document.querySelector('.popup');
+      updatePopup(popup, mapPins[data.uid]);
+      utils.removeClass(popup, 'hidden');
+      utils.removeClass(mapPinActive, 'map__pin--active');
+    } else {
+      renderPopup(mapPins[data.uid]);
+    }
+    utils.addClass(elem, 'map__pin--active');
+    mapPinActive = elem;
+
+    document.addEventListener('keydown', escKeydownPopupHandler);
+  };
+
   var hidePopup = function () {
     utils.addClass('.popup', 'hidden');
 
@@ -71,20 +87,6 @@
   };
 
   window.card = {
-    showPopup: function (elem, mapPins) {
-      var data = elem.dataset;
-      if (mapPinActive) {
-        var popup = document.querySelector('.popup');
-        updatePopup(popup, mapPins[data.uid]);
-        utils.removeClass(popup, 'hidden');
-        utils.removeClass(mapPinActive, 'map__pin--active');
-      } else {
-        renderPopup(mapPins[data.uid]);
-      }
-      utils.addClass(elem, 'map__pin--active');
-      mapPinActive = elem;
-
-      document.addEventListener('keydown', escKeydownPopupHandler);
-    }
+    showPopup: showPopup
   };
 })();
