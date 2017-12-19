@@ -6,7 +6,7 @@
 
 (function () {
   var utils = window.utils;
-  var pin = window.pin;
+  var pins = window.pins;
 
   var mapPinMainElem = document.querySelector('.map__pin--main');
   mapPinMainElem.addEventListener('mouseup', function () {
@@ -15,6 +15,6 @@
     utils.removeAttribute('.notice__header', 'disabled');
     utils.removeAttributeAll('.form__element', 'disabled');
 
-    pin.render();
+    pins.render();
   });
 })();

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Модуль для отрисовки пина и взаимодействия с ним
+ * Модуль для отрисовки пинов и взаимодействия с ними
  */
 
 (function () {
@@ -41,7 +41,7 @@
     document.querySelector('.map__pins').appendChild(frag);
   };
 
-  window.pin = {
+  window.pins = {
     render: renderMapPins
   };
 })();
