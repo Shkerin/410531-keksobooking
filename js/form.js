@@ -11,65 +11,33 @@
   var timeInElem = document.querySelector('#timein');
   var timeOutElem = document.querySelector('#timeout');
 
-  var changeTimeHandler = function (evt) {
-    var target = evt.target;
-    if (target === timeInElem) {
-      timeOutElem.selectedIndex = target.selectedIndex;
-    } else if (evt.target === timeOutElem) {
-      timeInElem.selectedIndex = target.selectedIndex;
-    }
+  var syncValues = function (element, value) {
+    element.value = value;
   };
 
-  timeInElem.addEventListener('change', changeTimeHandler);
-  timeOutElem.addEventListener('change', changeTimeHandler);
+  var timeArray = ['12:00', '13:00', '14:00'];
+  window.synchronizeFields(timeInElem, timeOutElem, timeArray, timeArray, syncValues);
 
   // Синхронизация поля «тип жилья» с минимальной ценой поля «цена за ночь»
   var typeElem = document.querySelector('#type');
   var priceElem = document.querySelector('#price');
 
-  var changeTypeHandler = function (evt) {
-    var target = evt.target;
-    switch (target.selectedIndex) {
-      case 0: // квартира
-        priceElem.setAttribute('min', '1000');
-        break;
-      case 1: // лачуга
-        priceElem.setAttribute('min', '0');
-        break;
-      case 2: // дом
-        priceElem.setAttribute('min', '5000');
-        break;
-      case 3: // дворец
-        priceElem.setAttribute('min', '10000');
-        break;
-    }
+  var syncValueWithMin = function (element, value) {
+    element.min = value;
   };
 
-  typeElem.addEventListener('change', changeTypeHandler);
+  // Односторонняя синхронизация значения первого поля с минимальным значением второго
+  var typeArray = ['flat', 'bungalo', 'house', 'palace'];
+  var priceArray = [1000, 0, 5000, 10000];
+  window.synchronizeFields(typeElem, priceElem, typeArray, priceArray, syncValueWithMin);
 
   // Синхронизация поля «количество комнат» с полем «количество мест»
-  var roomNumberElem = document.querySelector('#room_number');
+  var roomNumElem = document.querySelector('#room_number');
   var capacityElem = document.querySelector('#capacity');
 
-  var changeRoomNumberHandler = function (evt) {
-    var target = evt.target;
-    switch (target.selectedIndex) {
-      case 0:
-        capacityElem.selectedIndex = 2;
-        break;
-      case 1:
-        capacityElem.selectedIndex = utils.getRandomInt(1, 2);
-        break;
-      case 2:
-        capacityElem.selectedIndex = utils.getRandomInt(2);
-        break;
-      case 3:
-        capacityElem.selectedIndex = 3;
-        break;
-    }
-  };
-
-  roomNumberElem.addEventListener('change', changeRoomNumberHandler);
+  var roomNumArray = [utils.getRandomInt(1, 3), utils.getRandomInt(1, 2), 1, 100];
+  var capacityArray = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
+  window.synchronizeFields(roomNumElem, capacityElem, roomNumArray, capacityArray, syncValues);
 
   // Валидация полей
   var noticeFormElem = document.querySelector('.notice__form');
@@ -88,7 +56,7 @@
     }
 
     var addressElem = document.querySelector('#address');
-    if (addressElem.value.isEmpty) {
+    if (addressElem.value === '') {
       cancelSubmit(addressElem);
     }
 
@@ -103,11 +71,11 @@
       cancelSubmit(timeInElem, timeOutElem);
     }
 
-    if ((roomNumberElem.selectedIndex === 0 && capacityElem.selectedIndex !== 2) ||
-      (roomNumberElem.selectedIndex === 1 && !utils.isContains([1, 2], capacityElem.selectedIndex)) ||
-      (roomNumberElem.selectedIndex === 2 && !utils.isContains([0, 1, 2], capacityElem.selectedIndex)) ||
-      (roomNumberElem.selectedIndex === 3 && capacityElem.selectedIndex !== 3)) {
-      cancelSubmit(roomNumberElem, capacityElem);
+    if ((roomNumElem.selectedIndex === 0 && capacityElem.selectedIndex !== 2) ||
+      (roomNumElem.selectedIndex === 1 && !utils.isContains([1, 2], capacityElem.selectedIndex)) ||
+      (roomNumElem.selectedIndex === 2 && !utils.isContains([0, 1, 2], capacityElem.selectedIndex)) ||
+      (roomNumElem.selectedIndex === 3 && capacityElem.selectedIndex !== 3)) {
+      cancelSubmit(roomNumElem, capacityElem);
     }
   });
 })();
