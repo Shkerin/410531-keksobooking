@@ -17,7 +17,7 @@
     <div class="map__pins">
       <div class="map__pinsoverlay"><h2>И снова Токио!</h2></div>
 
-      <button class="map__pin map__pin--main">
+      <button class="map__pin map__pin--main" draggable="true">
         <img src="img/main-pin-image.png" width="40" height="44" draggable="false">
         <svg viewBox="0 0 70 70">
           <defs>
@@ -109,7 +109,7 @@
 
       <fieldset class="form__element form__element--wide" disabled>
         <label for="address">Адрес</label>
-        <input id="address" name="address" type="text" required>
+        <input id="address" name="address" type="text" readonly required>
       </fieldset>
 
       <fieldset class="form__element" disabled>
@@ -251,7 +251,7 @@
 <script src="js/utils.js"></script>
 <script src="js/data.js"></script>
 <script src="js/card.js"></script>
-<script src="js/pin.js"></script>
+<script src="js/pins.js"></script>
 <script src="js/map.js"></script>
 <script src="js/form.js"></script>
 

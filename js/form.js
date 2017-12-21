@@ -41,6 +41,7 @@
         break;
       case 3: // дворец
         priceElem.setAttribute('min', '10000');
+        break;
     }
   };
 
@@ -64,6 +65,7 @@
         break;
       case 3:
         capacityElem.selectedIndex = 3;
+        break;
     }
   };
 
