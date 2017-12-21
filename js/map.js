@@ -8,21 +8,27 @@
   var utils = window.utils;
   var pins = window.pins;
 
-  var mapElem = document.querySelector('.map');
   var pinMainElem = document.querySelector('.map__pin--main');
-  var isRenderPins = false;
+  var mapElem = document.querySelector('.map');
 
-  pinMainElem.addEventListener('mouseup', function () {
+  var showMapHandler = function () {
     utils.removeClass('.map', 'map--faded');
     utils.removeClass('.notice__form', 'notice__form--disabled');
     utils.removeAttribute('.notice__header', 'disabled');
     utils.removeAttributeAll('.form__element', 'disabled');
 
-    if (!isRenderPins) {
-      isRenderPins = true;
-      pins.render();
-    }
-  });
+    pins.render();
+
+    pinMainElem.removeEventListener('mouseup', showMapHandler);
+  };
+
+  pinMainElem.addEventListener('mouseup', showMapHandler);
+
+  // Вычисление смещения прокрутки
+  var getScrollOffset = function () {
+    return window.scrollY || window.scrollTop ||
+      document.getElementsByTagName('html')[0].scrollTop;
+  };
 
   // Перемещение главного пина по карте и вывод его координат в поле адреса
   pinMainElem.addEventListener('mousedown', function (evt) {
@@ -33,8 +39,11 @@
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
+      // Вычислить координаты главного пина с учётом вертикальной прокрутки
       var coordX = moveEvt.clientX - mapElem.offsetLeft;
-      var coordY = moveEvt.clientY - mapElem.offsetTop;
+      var coordY = moveEvt.clientY - mapElem.offsetTop + getScrollOffset();
+
+      // Ограничить перемещение главного пина
       var minCoordY = 100;
       var maxCoordY = 650;
       if (coordY < minCoordY) {
@@ -46,7 +55,12 @@
       pinMainElem.style.left = coordX + 'px';
       pinMainElem.style.top = coordY + 'px';
 
-      addressElem.value = 'x: ' + (moveEvt.clientX + 64 / 2) + ', y: ' + (moveEvt.clientY + 74 / 2);
+      // Вывести координаты в поле адреса с учётом острия главного пина
+      var imageHeight = 62;
+      var pinHeight = 10;
+      coordY += (imageHeight / 2) + pinHeight;
+
+      addressElem.value = 'x: ' + coordX + ', y: ' + coordY;
     };
 
     var mouseUpHandler = function (upEvt) {
