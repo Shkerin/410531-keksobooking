@@ -7,7 +7,6 @@
 (function () {
   var utils = window.utils;
   var data = window.data;
-  var card = window.card;
 
   var renderMapPins = function () {
     var frag = document.createDocumentFragment();
@@ -29,7 +28,7 @@
 
       var mapPinHandler = function (evt) {
         var elem = evt.currentTarget;
-        card.showPopup(elem, mapPins);
+        window.showCard(elem, mapPins);
       };
 
       pinElem.children[0].addEventListener('click', mapPinHandler);
