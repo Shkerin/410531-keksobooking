@@ -6,14 +6,9 @@
 
 (function () {
   var utils = window.utils;
-  var data = window.data;
 
-  var renderMapPins = function () {
-    var frag = document.createDocumentFragment();
-
-    var mapPins = data.create(8);
-    for (var i = 0; i < mapPins.length; i++) {
-      var pin = mapPins[i];
+  var renderPins = function () {
+    var createPinElem = function (pin) {
       var locationX = pin.location.x - 46 / 2;
       var locationY = pin.location.y - 64;
       var avatar = pin.author.avatar;
@@ -24,23 +19,35 @@
         '<img src="' + avatar + '" width="40" height="40" draggable="false">' +
         '</button>';
 
-      frag.appendChild(pinElem);
+      return pinElem;
+    };
 
-      var mapPinHandler = function (evt) {
-        var elem = evt.currentTarget;
-        window.showCard(elem, mapPins);
-      };
+    var loadHandler = function (data) {
+      var frag = document.createDocumentFragment();
 
-      pinElem.children[0].addEventListener('click', mapPinHandler);
-      pinElem.children[0].addEventListener('keydown', function (evt) {
-        utils.isEnterEvent(evt, mapPinHandler);
-      });
-    }
+      for (var i = 0; i < data.length; i++) {
+        data[i].uid = i;
+        var pinElem = createPinElem(data[i]);
+        frag.appendChild(pinElem);
 
-    document.querySelector('.map__pins').appendChild(frag);
+        var mapPinHandler = function (evt) {
+          var elem = evt.currentTarget;
+          window.showCard(elem, data);
+        };
+
+        pinElem.children[0].addEventListener('click', mapPinHandler);
+        pinElem.children[0].addEventListener('keydown', function (evt) {
+          utils.isEnterEvent(evt, mapPinHandler);
+        });
+      }
+
+      document.querySelector('.map__pins').appendChild(frag);
+    };
+
+    window.backend.loadPins(loadHandler, window.error.showErrorWindow);
   };
 
   window.pins = {
-    render: renderMapPins
+    render: renderPins
   };
 })();
