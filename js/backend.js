@@ -29,9 +29,17 @@
   var upload = function (data, loadHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = consts.RESPONSE_TYPE;
+    xhr.timeout = consts.TIMEOUT;
 
-    xhr.addEventListener('load', loadHandler);
-    xhr.addEventListener('error', errorHandler);
+    xhr.addEventListener('load', function () {
+      loadHandler(xhr.response);
+    });
+    xhr.addEventListener('error', function () {
+      errorHandler('Произошла ошибка при отправки данных');
+    });
+    xhr.addEventListener('timeout', function () {
+      errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
 
     xhr.open('POST', consts.URL_UPLOAD);
     xhr.send(data);

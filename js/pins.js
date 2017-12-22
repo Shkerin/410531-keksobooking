@@ -44,7 +44,7 @@
       document.querySelector('.map__pins').appendChild(frag);
     };
 
-    var errorHandler = function (msg) {
+    var loadErrorHandler = function (msg) {
       utils.addClass('.map', 'map--faded');
       utils.addClass('.notice__form', 'notice__form--disabled');
       utils.addAttribute('.notice__header', 'disabled');
@@ -60,7 +60,7 @@
       document.querySelector('.map').appendChild(divError);
     };
 
-    window.backend.load(loadHandler, errorHandler);
+    window.backend.load(loadHandler, loadErrorHandler);
   };
 
   window.pins = {
