@@ -47,6 +47,6 @@
 
   window.backend = {
     loadPins: load,
-    savePins: upload
+    savePin: upload
   };
 })();
