@@ -16,7 +16,7 @@
       loadHandler(xhr.response);
     });
     xhr.addEventListener('error', function () {
-      errorHandler('Произошла ошибка соединения')
+      errorHandler('Произошла ошибка соединения');
     });
     xhr.addEventListener('timeout', function () {
       errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
@@ -40,5 +40,5 @@
   window.backend = {
     load: load,
     upload: upload
-  }
+  };
 })();
