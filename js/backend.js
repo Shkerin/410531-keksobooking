@@ -46,7 +46,7 @@
   };
 
   window.backend = {
-    load: load,
-    upload: upload
+    loadPins: load,
+    savePins: upload
   };
 })();

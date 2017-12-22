@@ -103,27 +103,11 @@
     noticeFormElem.querySelector('#feature-conditioner').checked = false;
   };
 
-  var loadErrorHandler = function (msg) {
-    utils.addClass('.map', 'map--faded');
-    utils.addClass('.notice__form', 'notice__form--disabled');
-    utils.addAttribute('.notice__header', 'disabled');
-    utils.addAttributeAll('.form__element', 'disabled');
-
-    var divError = document.createElement('div');
-
-    divError.classList.add('error');
-    divError.innerHTML =
-      '<h3>Ошибка отправки данных с вервера</h3>' +
-      '<p>' + msg + '</p>';
-
-    document.querySelector('.map').appendChild(divError);
-  };
-
   noticeFormElem.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
     if (validationForm()) {
-      backend.upload(new FormData(noticeFormElem), loadHandler, loadErrorHandler);
+      backend.savePins(new FormData(noticeFormElem), loadHandler, window.error.showErrorWindow);
     }
   });
 })();

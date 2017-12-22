@@ -44,23 +44,7 @@
       document.querySelector('.map__pins').appendChild(frag);
     };
 
-    var loadErrorHandler = function (msg) {
-      utils.addClass('.map', 'map--faded');
-      utils.addClass('.notice__form', 'notice__form--disabled');
-      utils.addAttribute('.notice__header', 'disabled');
-      utils.addAttributeAll('.form__element', 'disabled');
-
-      var divError = document.createElement('div');
-
-      divError.classList.add('error');
-      divError.innerHTML =
-        '<h3>Ошибка получения данных с вервера</h3>' +
-        '<p>' + msg + '</p>';
-
-      document.querySelector('.map').appendChild(divError);
-    };
-
-    window.backend.load(loadHandler, loadErrorHandler);
+    window.backend.loadPins(loadHandler, window.error.showErrorWindow);
   };
 
   window.pins = {
