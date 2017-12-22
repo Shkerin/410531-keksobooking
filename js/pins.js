@@ -79,10 +79,10 @@
           result = guestsElem.value === ('' + offer.guests);
         }
 
-        var filterFeature = function (elem, array) {
+        var filterFeature = function (elem, offerList) {
           var flag = false;
-          for (var i = 0; i < array.features.length; i++) {
-            var feature = array.features[i];
+          for (var i = 0; i < offerList.features.length; i++) {
+            var feature = offerList.features[i];
             if (elem.value === feature) {
               flag = true;
               break;
