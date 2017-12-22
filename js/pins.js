@@ -157,6 +157,6 @@
   };
 
   window.pins = {
-    render: renderPins
+    render: render
   };
 })();
