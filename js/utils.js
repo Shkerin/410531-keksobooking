@@ -5,18 +5,17 @@
  */
 
 (function () {
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
+  var consts = window.consts;
 
   window.utils = {
     isEscEvent: function (evt, action) {
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.keyCode === consts.ESC_KEYCODE) {
         action(evt);
       }
     },
 
     isEnterEvent: function (evt, action) {
-      if (evt.keyCode === ENTER_KEYCODE) {
+      if (evt.keyCode === consts.ENTER_KEYCODE) {
         action(evt);
       }
     },
@@ -97,6 +96,42 @@
         }
       } else {
         throw new TypeError('Exception remove class: target is not valid type');
+      }
+    },
+
+    addAttribute: function (target, attribute) {
+      if (typeof attribute !== 'string') {
+        throw new TypeError('Exception add attribute: attribute is not valid type');
+      }
+
+      if (target instanceof HTMLElement) {
+        target.setAttribute(attribute, attribute);
+      } else if (typeof target === 'string') {
+        var elem = document.querySelector(target);
+        if (elem !== null) {
+          elem.setAttribute(attribute, attribute);
+        }
+      } else {
+        throw new TypeError('Exception add attribute: target is not valid type');
+      }
+    },
+
+    addAttributeAll: function (target, attribute) {
+      if (typeof attribute !== 'string') {
+        throw new TypeError('Exception add attribute all: attribute is not valid type');
+      }
+
+      if (target instanceof HTMLElement) {
+        this.addAttribute(target, attribute);
+      } else if (typeof target === 'string') {
+        var elems = document.querySelectorAll(target);
+        if (elems !== null) {
+          for (var i = 0; i < elems.length; i++) {
+            this.addAttribute(elems[i], attribute);
+          }
+        }
+      } else {
+        throw new TypeError('Exception add attribute all: target is not valid type');
       }
     },
 
