@@ -16,8 +16,8 @@
     element.value = value;
   };
 
-  var timeArray = ['12:00', '13:00', '14:00'];
-  window.synchronizeFields(timeInElem, timeOutElem, timeArray, timeArray, syncValues);
+  var times = ['12:00', '13:00', '14:00'];
+  window.synchronizeFields(timeInElem, timeOutElem, times, times, syncValues);
 
   // Синхронизация поля «тип жилья» с минимальной ценой поля «цена за ночь»
   var typeElem = document.querySelector('#type');
@@ -28,17 +28,17 @@
   };
 
   // Односторонняя синхронизация значения первого поля с минимальным значением второго
-  var typeArray = ['flat', 'bungalo', 'house', 'palace'];
-  var priceArray = [1000, 0, 5000, 10000];
-  window.synchronizeFields(typeElem, priceElem, typeArray, priceArray, syncValueWithMin);
+  var types = ['flat', 'bungalo', 'house', 'palace'];
+  var prices = [1000, 0, 5000, 10000];
+  window.synchronizeFields(typeElem, priceElem, types, prices, syncValueWithMin);
 
   // Синхронизация поля «количество комнат» с полем «количество мест»
-  var roomNumElem = document.querySelector('#room_number');
+  var roomElem = document.querySelector('#room_number');
   var capacityElem = document.querySelector('#capacity');
 
-  var roomNumArray = [utils.getRandomInt(1, 3), utils.getRandomInt(1, 2), 1, 100];
-  var capacityArray = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
-  window.synchronizeFields(roomNumElem, capacityElem, roomNumArray, capacityArray, syncValues);
+  var rooms = [utils.getRandomInt(1, 3), utils.getRandomInt(1, 2), 1, 100];
+  var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
+  window.synchronizeFields(roomElem, capacityElem, rooms, capacities, syncValues);
 
   // Валидация полей
   var validationForm = function () {
@@ -71,11 +71,11 @@
       validationError(timeInElem, timeOutElem);
     }
 
-    if ((roomNumElem.selectedIndex === 0 && capacityElem.selectedIndex !== 2) ||
-      (roomNumElem.selectedIndex === 1 && !utils.isContains([1, 2], capacityElem.selectedIndex)) ||
-      (roomNumElem.selectedIndex === 2 && !utils.isContains([0, 1, 2], capacityElem.selectedIndex)) ||
-      (roomNumElem.selectedIndex === 3 && capacityElem.selectedIndex !== 3)) {
-      validationError(roomNumElem, capacityElem);
+    if ((roomElem.selectedIndex === 0 && capacityElem.selectedIndex !== 2) ||
+      (roomElem.selectedIndex === 1 && !utils.isContains([1, 2], capacityElem.selectedIndex)) ||
+      (roomElem.selectedIndex === 2 && !utils.isContains([0, 1, 2], capacityElem.selectedIndex)) ||
+      (roomElem.selectedIndex === 3 && capacityElem.selectedIndex !== 3)) {
+      validationError(roomElem, capacityElem);
     }
 
     return result;

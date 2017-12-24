@@ -26,8 +26,8 @@
 
     var removePins = function () {
       var mapPinsElem = document.querySelector('.map__pins');
-      var pinsArray = mapPinsElem.querySelectorAll('.map__pin:not(.map__pin--main)');
-      [].forEach.call(pinsArray, function (elem) {
+      var mapPins = mapPinsElem.querySelectorAll('.map__pin:not(.map__pin--main)');
+      [].forEach.call(mapPins, function (elem) {
         mapPinsElem.removeChild(elem);
       });
     };
@@ -58,6 +58,7 @@
       var samePins = sourcePins.filter(function (pin) {
         var offer = pin.offer;
         var result = typeElem.value === 'any' || typeElem.value === offer.type;
+
         if (result && priceElem.value !== 'any') {
           switch (priceElem.value) {
             case 'middle':
@@ -71,6 +72,7 @@
               break;
           }
         }
+
         if (result && roomsElem.value !== 'any') {
           result = roomsElem.value === ('' + offer.rooms);
         }

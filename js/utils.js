@@ -20,8 +20,8 @@
       }
     },
 
-    isContains: function (arr, elem) {
-      return arr.indexOf(elem) !== -1;
+    isContains: function (array, elem) {
+      return array.indexOf(elem) !== -1;
     },
 
     isNumeric: function (num) {

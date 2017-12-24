@@ -40,15 +40,15 @@
     };
 
     var getFeature = function () {
-      var arr = [];
+      var newFeatures = [];
 
-      var featuresCopy = features.slice();
+      var copyFeatures = features.slice();
       var rand = utils.getRandomInt(features.length - 1);
       for (var k = 0; k < rand; k++) {
-        arr.push(utils.getRandomValueFromArray(featuresCopy));
+        newFeatures.push(utils.getRandomValueFromArray(copyFeatures));
       }
 
-      return arr;
+      return newFeatures;
     };
 
     var mapPins = [];
