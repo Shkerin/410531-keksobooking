@@ -20,12 +20,12 @@
       'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
 
     // Заполнение типа жилья
-    var pinTypes = {
+    var PIN_TYPE = {
       'flat': 'Квартира',
       'bungalo': 'Бунгало',
       'house': 'Дом'
     };
-    elem.querySelector('h4').textContent = pinTypes[offer.type];
+    elem.querySelector('h4').textContent = PIN_TYPE[offer.type];
 
     // Заполнение удобств в квартире
     var featuresElem = elem.querySelector('.popup__features');

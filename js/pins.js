@@ -11,8 +11,10 @@
     var sourcePins = [];
 
     var createPinElem = function (pin) {
-      var locationX = pin.location.x - 46 / 2;
-      var locationY = pin.location.y - 64;
+      var PIN_WEIGHT = 46;
+      var PIN_HEIGHT = 10;
+      var locationX = pin.location.x - PIN_WEIGHT / 2;
+      var locationY = pin.location.y - PIN_HEIGHT;
       var avatar = pin.author.avatar;
 
       var pinElem = document.createElement('div');
@@ -59,16 +61,20 @@
         var offer = pin.offer;
         var result = typeElem.value === 'any' || typeElem.value === offer.type;
 
+        var PRICE = {
+          'min': 10000,
+          'max': 50000
+        };
         if (result && priceElem.value !== 'any') {
           switch (priceElem.value) {
             case 'middle':
-              result = offer.price >= 10000 && offer.price <= 50000;
+              result = offer.price >= PRICE.min && offer.price <= PRICE.max;
               break;
             case 'low':
-              result = offer.price < 10000;
+              result = offer.price < PRICE.min;
               break;
             case 'high':
-              result = offer.price >= 50000;
+              result = offer.price >= PRICE.max;
               break;
           }
         }

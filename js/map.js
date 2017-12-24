@@ -44,21 +44,21 @@
       var coordY = moveEvt.clientY - mapElem.offsetTop + getScrollOffset();
 
       // Ограничить перемещение главного пина
-      var minCoordY = 100;
-      var maxCoordY = 650;
-      if (coordY < minCoordY) {
-        coordY = minCoordY;
-      } else if (coordY > maxCoordY) {
-        coordY = maxCoordY;
+      var MIN_COORD_Y = 100;
+      var MAX_COORD_Y = 650;
+      if (coordY < MIN_COORD_Y) {
+        coordY = MIN_COORD_Y;
+      } else if (coordY > MAX_COORD_Y) {
+        coordY = MAX_COORD_Y;
       }
 
       pinMainElem.style.left = coordX + 'px';
       pinMainElem.style.top = coordY + 'px';
 
       // Вывести координаты в поле адреса с учётом острия главного пина
-      var imageHeight = 62;
-      var pinHeight = 10;
-      coordY += (imageHeight / 2) + pinHeight;
+      var IMAGE_HEIGHT = 62;
+      var PIN_HEIGHT = 10;
+      coordY += (IMAGE_HEIGHT / 2) + PIN_HEIGHT;
 
       addressElem.value = 'x: ' + coordX + ', y: ' + coordY;
     };

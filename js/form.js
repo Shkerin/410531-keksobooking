@@ -16,8 +16,8 @@
     element.value = value;
   };
 
-  var times = ['12:00', '13:00', '14:00'];
-  window.synchronizeFields(timeInElem, timeOutElem, times, times, syncValues);
+  var TIMES = ['12:00', '13:00', '14:00'];
+  window.synchronizeFields(timeInElem, timeOutElem, TIMES, TIMES, syncValues);
 
   // Синхронизация поля «тип жилья» с минимальной ценой поля «цена за ночь»
   var typeElem = document.querySelector('#type');
@@ -28,9 +28,9 @@
   };
 
   // Односторонняя синхронизация значения первого поля с минимальным значением второго
-  var types = ['flat', 'bungalo', 'house', 'palace'];
-  var prices = [1000, 0, 5000, 10000];
-  window.synchronizeFields(typeElem, priceElem, types, prices, syncValueWithMin);
+  var TYPES = ['flat', 'bungalo', 'house', 'palace'];
+  var PRICES = [1000, 0, 5000, 10000];
+  window.synchronizeFields(typeElem, priceElem, TYPES, PRICES, syncValueWithMin);
 
   // Синхронизация поля «количество комнат» с полем «количество мест»
   var roomElem = document.querySelector('#room_number');
