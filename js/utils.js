@@ -51,20 +51,6 @@
       return Math.floor(rand) + min;
     },
 
-    getRandomValueFromArray: function (array) {
-      if (!(array instanceof Array)) {
-        throw new TypeError('Exception of computing a random value: argument function is not array');
-      }
-
-      var idx = this.getRandomInt(0, array.length - 1);
-      var val = array[idx];
-      if (array.length > 0) {
-        array.splice(idx, 1);
-      }
-
-      return val;
-    },
-
     addClass: function (target, className) {
       if (typeof className !== 'string') {
         throw new TypeError('Exception add class: className is not valid type');
