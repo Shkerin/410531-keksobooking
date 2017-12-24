@@ -8,6 +8,11 @@
   var utils = window.utils;
   var pins = window.pins;
 
+  var MIN_COORD_Y = 100;
+  var MAX_COORD_Y = 650;
+  var IMG_HEIGHT = 62;
+  var PIN_HEIGHT = 10;
+
   var pinMainElem = document.querySelector('.map__pin--main');
   var mapElem = document.querySelector('.map');
 
@@ -44,8 +49,6 @@
       var coordY = moveEvt.clientY - mapElem.offsetTop + getScrollOffset();
 
       // Ограничить перемещение главного пина
-      var MIN_COORD_Y = 100;
-      var MAX_COORD_Y = 650;
       if (coordY < MIN_COORD_Y) {
         coordY = MIN_COORD_Y;
       } else if (coordY > MAX_COORD_Y) {
@@ -56,9 +59,7 @@
       pinMainElem.style.top = coordY + 'px';
 
       // Вывести координаты в поле адреса с учётом острия главного пина
-      var IMAGE_HEIGHT = 62;
-      var PIN_HEIGHT = 10;
-      coordY += (IMAGE_HEIGHT / 2) + PIN_HEIGHT;
+      coordY += (IMG_HEIGHT / 2) + PIN_HEIGHT;
 
       addressElem.value = 'x: ' + coordX + ', y: ' + coordY;
     };

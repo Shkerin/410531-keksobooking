@@ -5,6 +5,12 @@
  */
 
 (function () {
+  var PIN_TYPE = {
+    'flat': 'Квартира',
+    'bungalo': 'Бунгало',
+    'house': 'Дом'
+  };
+
   var updateCard = function (elem, pin) {
     var offer = pin.offer;
 
@@ -20,11 +26,6 @@
       'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
 
     // Заполнение типа жилья
-    var PIN_TYPE = {
-      'flat': 'Квартира',
-      'bungalo': 'Бунгало',
-      'house': 'Дом'
-    };
     elem.querySelector('h4').textContent = PIN_TYPE[offer.type];
 
     // Заполнение удобств в квартире

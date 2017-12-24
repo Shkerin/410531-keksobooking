@@ -8,6 +8,10 @@
   var utils = window.utils;
   var backend = window.backend;
 
+  var TIMES = ['12:00', '13:00', '14:00'];
+  var TYPES = ['flat', 'bungalo', 'house', 'palace'];
+  var PRICES = [1000, 0, 5000, 10000];
+
   // Синхранизация полей «время заезда» и «время выезда»
   var timeInElem = document.querySelector('#timein');
   var timeOutElem = document.querySelector('#timeout');
@@ -16,7 +20,6 @@
     element.value = value;
   };
 
-  var TIMES = ['12:00', '13:00', '14:00'];
   window.synchronizeFields(timeInElem, timeOutElem, TIMES, TIMES, syncValues);
 
   // Синхронизация поля «тип жилья» с минимальной ценой поля «цена за ночь»
@@ -28,8 +31,6 @@
   };
 
   // Односторонняя синхронизация значения первого поля с минимальным значением второго
-  var TYPES = ['flat', 'bungalo', 'house', 'palace'];
-  var PRICES = [1000, 0, 5000, 10000];
   window.synchronizeFields(typeElem, priceElem, TYPES, PRICES, syncValueWithMin);
 
   // Синхронизация поля «количество комнат» с полем «количество мест»
@@ -60,10 +61,10 @@
       validationError(addressElem);
     }
 
-    if ((typeElem.selectedIndex === 0 && priceElem.value < 1000) ||
-      (typeElem.selectedIndex === 1 && priceElem.value < 0) ||
-      (typeElem.selectedIndex === 2 && priceElem.value < 5000) ||
-      (typeElem.selectedIndex === 3 && priceElem.value < 10000)) {
+    if ((typeElem.selectedIndex === 0 && priceElem.value < PRICES[0]) ||
+      (typeElem.selectedIndex === 1 && priceElem.value < PRICES[1]) ||
+      (typeElem.selectedIndex === 2 && priceElem.value < PRICES[2]) ||
+      (typeElem.selectedIndex === 3 && priceElem.value < PRICES[3])) {
       validationError(typeElem, priceElem);
     }
 

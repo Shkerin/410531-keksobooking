@@ -7,12 +7,17 @@
 (function () {
   var utils = window.utils;
 
+  var PIN_WEIGHT = 46;
+  var PIN_HEIGHT = 10;
+  var PRICE = {
+    'min': 10000,
+    'max': 50000
+  };
+
   var render = function () {
     var sourcePins = [];
 
     var createPinElem = function (pin) {
-      var PIN_WEIGHT = 46;
-      var PIN_HEIGHT = 10;
       var locationX = pin.location.x - PIN_WEIGHT / 2;
       var locationY = pin.location.y - PIN_HEIGHT;
       var avatar = pin.author.avatar;
@@ -61,10 +66,6 @@
         var offer = pin.offer;
         var result = typeElem.value === 'any' || typeElem.value === offer.type;
 
-        var PRICE = {
-          'min': 10000,
-          'max': 50000
-        };
         if (result && priceElem.value !== 'any') {
           switch (priceElem.value) {
             case 'middle':
