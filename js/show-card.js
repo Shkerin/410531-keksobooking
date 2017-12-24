@@ -21,11 +21,11 @@
     var data = elem.dataset;
     if (mapPinActive) {
       var popup = document.querySelector('.popup');
-      card.updateCard(popup, mapPins[data.uid]);
+      card.update(popup, mapPins[data.uid]);
       utils.removeClass(popup, 'hidden');
       utils.removeClass(mapPinActive, 'map__pin--active');
     } else {
-      card.renderCard(mapPins[data.uid]);
+      card.render(mapPins[data.uid]);
     }
     utils.addClass(elem, 'map__pin--active');
     mapPinActive = elem;

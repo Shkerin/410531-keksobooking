@@ -20,6 +20,6 @@
   };
 
   window.error = {
-    showErrorWindow: showError
+    show: showError
   };
 })();

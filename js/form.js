@@ -108,7 +108,7 @@
     evt.preventDefault();
 
     if (validationForm()) {
-      backend.savePin(new FormData(noticeFormElem), loadHandler, window.error.showErrorWindow);
+      backend.savePin(new FormData(noticeFormElem), loadHandler, window.error.show);
     }
   });
 })();

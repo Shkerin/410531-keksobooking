@@ -51,7 +51,7 @@
   };
 
   window.card = {
-    updateCard: updateCard,
-    renderCard: renderCard
+    render: renderCard,
+    update: updateCard
   };
 })();

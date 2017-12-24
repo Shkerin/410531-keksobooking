@@ -59,17 +59,17 @@
     renderPins(filterPins);
   };
 
-  var render = function () {
+  var loadAndRender = function () {
     var loadHandler = function (data) {
       sourcePins = data;
       updatePins();
     };
 
-    window.backend.loadPins(loadHandler, window.error.showErrorWindow);
+    window.backend.loadPins(loadHandler, window.error.show);
   };
 
   window.pins = {
-    render: render,
+    render: loadAndRender,
     update: updatePins
   };
 })();
