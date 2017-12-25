@@ -12,9 +12,11 @@
   var TYPES = ['flat', 'bungalo', 'house', 'palace'];
   var PRICES = [1000, 0, 5000, 10000];
 
+  var formElem = document.querySelector('.notice__form');
+
   // Синхранизация полей «время заезда» и «время выезда»
-  var timeInElem = document.querySelector('#timein');
-  var timeOutElem = document.querySelector('#timeout');
+  var timeInElem = formElem.querySelector('#timein');
+  var timeOutElem = formElem.querySelector('#timeout');
 
   var syncValues = function (element, value) {
     element.value = value;
@@ -23,8 +25,8 @@
   window.synchronizeFields(timeInElem, timeOutElem, TIMES, TIMES, syncValues);
 
   // Синхронизация поля «тип жилья» с минимальной ценой поля «цена за ночь»
-  var typeElem = document.querySelector('#type');
-  var priceElem = document.querySelector('#price');
+  var typeElem = formElem.querySelector('#type');
+  var priceElem = formElem.querySelector('#price');
 
   var syncValueWithMin = function (element, value) {
     element.min = value;
@@ -34,8 +36,8 @@
   window.synchronizeFields(typeElem, priceElem, TYPES, PRICES, syncValueWithMin);
 
   // Синхронизация поля «количество комнат» с полем «количество мест»
-  var roomElem = document.querySelector('#room_number');
-  var capacityElem = document.querySelector('#capacity');
+  var roomElem = formElem.querySelector('#room_number');
+  var capacityElem = formElem.querySelector('#capacity');
 
   var rooms = [utils.getRandomInt(1, 3), utils.getRandomInt(1, 2), 1, 100];
   var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
@@ -51,12 +53,12 @@
       result = false;
     };
 
-    var titleElem = document.querySelector('#title');
+    var titleElem = formElem.querySelector('#title');
     if (titleElem.value.length < 30 || titleElem.value.length > 100) {
       validationError(titleElem.style);
     }
 
-    var addressElem = document.querySelector('#address');
+    var addressElem = formElem.querySelector('#address');
     if (addressElem.value === '') {
       validationError(addressElem);
     }
@@ -83,32 +85,30 @@
   };
 
   // Отправка данных на сервер
-  var noticeFormElem = document.querySelector('.notice__form');
-
   var loadHandler = function () {
-    noticeFormElem.querySelector('#title').value = '';
-    noticeFormElem.querySelector('#address').value = '';
-    noticeFormElem.querySelector('#type').value = 'flat';
-    noticeFormElem.querySelector('#price').value = '1000';
-    noticeFormElem.querySelector('#timein').value = '12:00';
-    noticeFormElem.querySelector('#timeout').value = '12:00';
-    noticeFormElem.querySelector('#room_number').value = 1;
-    noticeFormElem.querySelector('#capacity').value = 3;
-    noticeFormElem.querySelector('#description').value = '';
+    formElem.querySelector('#title').value = '';
+    formElem.querySelector('#address').value = '';
+    formElem.querySelector('#type').value = 'flat';
+    formElem.querySelector('#price').value = '1000';
+    formElem.querySelector('#timein').value = '12:00';
+    formElem.querySelector('#timeout').value = '12:00';
+    formElem.querySelector('#room_number').value = 1;
+    formElem.querySelector('#capacity').value = 3;
+    formElem.querySelector('#description').value = '';
 
-    noticeFormElem.querySelector('#feature-wifi').checked = false;
-    noticeFormElem.querySelector('#feature-dishwasher').checked = false;
-    noticeFormElem.querySelector('#feature-parking').checked = false;
-    noticeFormElem.querySelector('#feature-washer').checked = false;
-    noticeFormElem.querySelector('#feature-elevator').checked = false;
-    noticeFormElem.querySelector('#feature-conditioner').checked = false;
+    formElem.querySelector('#feature-wifi').checked = false;
+    formElem.querySelector('#feature-dishwasher').checked = false;
+    formElem.querySelector('#feature-parking').checked = false;
+    formElem.querySelector('#feature-washer').checked = false;
+    formElem.querySelector('#feature-elevator').checked = false;
+    formElem.querySelector('#feature-conditioner').checked = false;
   };
 
-  noticeFormElem.addEventListener('submit', function (evt) {
+  formElem.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
     if (validationForm()) {
-      backend.savePin(new FormData(noticeFormElem), loadHandler, window.error.show);
+      backend.savePin(new FormData(formElem), loadHandler, window.error.show);
     }
   });
 })();

@@ -13,14 +13,17 @@
   var IMG_HEIGHT = 62;
   var PIN_HEIGHT = 10;
 
-  var pinMainElem = document.querySelector('.map__pin--main');
-  var mapElem = document.querySelector('.map');
   var htmlElem = document.querySelector('html');
+  var mapElem = document.querySelector('.map');
+  var pinMainElem = mapElem.querySelector('.map__pin--main');
 
   var showMapHandler = function () {
-    utils.removeClass('.map', 'map--faded');
-    utils.removeClass('.notice__form', 'notice__form--disabled');
-    utils.removeAttribute('.notice__header', 'disabled');
+    var formElem = document.querySelector('.notice__form');
+    var noticeHeaderElem = document.querySelector('.notice__header');
+
+    mapElem.classList.remove('map--faded');
+    formElem.classList.remove('notice__form--disabled');
+    noticeHeaderElem.removeAttribute('disabled');
     utils.removeAttributeAll('.form__element', 'disabled');
 
     pins.render();

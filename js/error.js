@@ -3,10 +3,14 @@
 (function () {
   var utils = window.utils;
 
+  var mapElem = document.querySelector('.map');
+  var formElem = document.querySelector('.notice__form');
+  var headerElem = document.querySelector('.notice__header');
+
   var showError = function (msg) {
-    utils.addClass('.map', 'map--faded');
-    utils.addClass('.notice__form', 'notice__form--disabled');
-    utils.addAttribute('.notice__header', 'disabled');
+    mapElem.classList.add('map--faded');
+    formElem.classList.add('notice__form--disabled');
+    headerElem.setAttribute('disabled', 'disabled');
     utils.addAttributeAll('.form__element', 'disabled');
 
     var divError = document.createElement('div');
@@ -16,7 +20,7 @@
       '<h3>Ошибка отправки данных с сервера</h3>' +
       '<p>' + msg + '</p>';
 
-    document.querySelector('.map').appendChild(divError);
+    mapElem.appendChild(divError);
   };
 
   window.error = {

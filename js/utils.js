@@ -45,53 +45,12 @@
       return Math.floor(rand) + min;
     },
 
-    addClass: function (target, className) {
-      if (target instanceof HTMLElement) {
-        target.classList.add(className);
-      } else if (typeof target === 'string') {
-        var elem = document.querySelector(target);
-        if (elem !== null) {
-          elem.classList.add(className);
-        }
-      } else {
-        throw new TypeError('Exception add class: target is not valid type');
-      }
-    },
-
-    removeClass: function (target, className) {
-      if (target instanceof HTMLElement) {
-        target.classList.remove(className);
-      } else if (typeof target === 'string') {
-        var elem = document.querySelector(target);
-        if (elem !== null) {
-          elem.classList.remove(className);
-        }
-      } else {
-        throw new TypeError('Exception remove class: target is not valid type');
-      }
-    },
-
-    addAttribute: function (target, attribute) {
-      if (target instanceof HTMLElement) {
-        target.setAttribute(attribute, attribute);
-      } else if (typeof target === 'string') {
-        var elem = document.querySelector(target);
-        if (elem !== null) {
-          elem.setAttribute(attribute, attribute);
-        }
-      } else {
-        throw new TypeError('Exception add attribute: target is not valid type');
-      }
-    },
-
     addAttributeAll: function (target, attribute) {
-      if (target instanceof HTMLElement) {
-        this.addAttribute(target, attribute);
-      } else if (typeof target === 'string') {
+      if (typeof target === 'string') {
         var elems = document.querySelectorAll(target);
         if (elems !== null) {
           for (var i = 0; i < elems.length; i++) {
-            this.addAttribute(elems[i], attribute);
+            elems[i].setAttribute(attribute, attribute);
           }
         }
       } else {
@@ -99,23 +58,8 @@
       }
     },
 
-    removeAttribute: function (target, attribute) {
-      if (target instanceof HTMLElement) {
-        target.removeAttribute(attribute);
-      } else if (typeof target === 'string') {
-        var elem = document.querySelector(target);
-        if (elem !== null) {
-          elem.removeAttribute(attribute);
-        }
-      } else {
-        throw new TypeError('Exception remove attribute: target is not valid type');
-      }
-    },
-
     removeAttributeAll: function (target, attribute) {
-      if (target instanceof HTMLElement) {
-        target.removeAttribute(attribute);
-      } else if (typeof target === 'string') {
+      if (typeof target === 'string') {
         var elems = document.querySelectorAll(target);
         if (elems !== null) {
           for (var i = 0; i < elems.length; i++) {

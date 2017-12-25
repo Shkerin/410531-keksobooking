@@ -13,7 +13,7 @@
   var clickPopupCloseHandler = function () {
     hideCard();
     if (mapPinActive) {
-      utils.removeClass(mapPinActive, 'map__pin--active');
+      mapPinActive.classList.remove('map__pin--active');
     }
   };
 
@@ -22,12 +22,12 @@
     if (mapPinActive) {
       var popup = document.querySelector('.popup');
       card.update(popup, mapPins[data.uid]);
-      utils.removeClass(popup, 'hidden');
-      utils.removeClass(mapPinActive, 'map__pin--active');
+      popup.classList.remove('hidden');
+      mapPinActive.classList.remove('map__pin--active');
     } else {
       card.render(mapPins[data.uid]);
     }
-    utils.addClass(elem, 'map__pin--active');
+    elem.classList.add('map__pin--active');
     mapPinActive = elem;
 
     var popupCloseElem = document.querySelector('.popup__close');
@@ -37,9 +37,10 @@
   };
 
   var hideCard = function () {
-    utils.addClass('.popup', 'hidden');
+    var popupElem = document.querySelector('.popup');
+    var popupCloseElem = popupElem.querySelector('.popup__close');
 
-    var popupCloseElem = document.querySelector('.popup__close');
+    popupElem.classList.add('hidden');
 
     document.removeEventListener('keydown', escKeydownPopupHandler);
     popupCloseElem.removeEventListener('click', clickPopupCloseHandler);
