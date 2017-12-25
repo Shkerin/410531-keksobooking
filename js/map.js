@@ -15,6 +15,7 @@
 
   var pinMainElem = document.querySelector('.map__pin--main');
   var mapElem = document.querySelector('.map');
+  var htmlElem = document.querySelector('html');
 
   var showMapHandler = function () {
     utils.removeClass('.map', 'map--faded');
@@ -31,8 +32,7 @@
 
   // Вычисление смещения прокрутки
   var getScrollOffset = function () {
-    return window.scrollY || window.scrollTop ||
-      document.getElementsByTagName('html')[0].scrollTop;
+    return window.scrollY || window.scrollTop || htmlElem.scrollTop;
   };
 
   // Перемещение главного пина по карте и вывод его координат в поле адреса
