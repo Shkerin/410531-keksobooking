@@ -14,12 +14,6 @@
       }
     },
 
-    isEnterEvent: function (evt, action) {
-      if (evt.keyCode === consts.ENTER_KEYCODE) {
-        action(evt);
-      }
-    },
-
     isContains: function (array, elem) {
       return array.indexOf(elem) !== -1;
     },
@@ -52,10 +46,6 @@
     },
 
     addClass: function (target, className) {
-      if (typeof className !== 'string') {
-        throw new TypeError('Exception add class: className is not valid type');
-      }
-
       if (target instanceof HTMLElement) {
         target.classList.add(className);
       } else if (typeof target === 'string') {
@@ -69,10 +59,6 @@
     },
 
     removeClass: function (target, className) {
-      if (typeof className !== 'string') {
-        throw new TypeError('Exception remove class: className is not valid type');
-      }
-
       if (target instanceof HTMLElement) {
         target.classList.remove(className);
       } else if (typeof target === 'string') {
@@ -86,10 +72,6 @@
     },
 
     addAttribute: function (target, attribute) {
-      if (typeof attribute !== 'string') {
-        throw new TypeError('Exception add attribute: attribute is not valid type');
-      }
-
       if (target instanceof HTMLElement) {
         target.setAttribute(attribute, attribute);
       } else if (typeof target === 'string') {
@@ -103,10 +85,6 @@
     },
 
     addAttributeAll: function (target, attribute) {
-      if (typeof attribute !== 'string') {
-        throw new TypeError('Exception add attribute all: attribute is not valid type');
-      }
-
       if (target instanceof HTMLElement) {
         this.addAttribute(target, attribute);
       } else if (typeof target === 'string') {
@@ -122,10 +100,6 @@
     },
 
     removeAttribute: function (target, attribute) {
-      if (typeof attribute !== 'string') {
-        throw new TypeError('Exception remove attribute: attribute is not valid type');
-      }
-
       if (target instanceof HTMLElement) {
         target.removeAttribute(attribute);
       } else if (typeof target === 'string') {
@@ -139,10 +113,6 @@
     },
 
     removeAttributeAll: function (target, attribute) {
-      if (typeof attribute !== 'string') {
-        throw new TypeError('Exception remove attribute all: attribute is not valid type');
-      }
-
       if (target instanceof HTMLElement) {
         target.removeAttribute(attribute);
       } else if (typeof target === 'string') {
