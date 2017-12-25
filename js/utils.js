@@ -25,11 +25,8 @@
     getRandomInt: function () {
       if (arguments.length === 1) {
         return this._getRandomIntMinMax(0, arguments[0]);
-      } else if (arguments.length === 2) {
-        return this._getRandomIntMinMax(arguments[0], arguments[1]);
-      } else {
-        throw new TypeError('Exception of computing a random value: invalid number of arguments');
       }
+      return this._getRandomIntMinMax(arguments[0], arguments[1]);
     },
 
     _getRandomIntMinMax: function (min, max) {
@@ -46,29 +43,17 @@
     },
 
     addAttributeAll: function (target, attribute) {
-      if (typeof target === 'string') {
-        var elems = document.querySelectorAll(target);
-        if (elems !== null) {
-          for (var i = 0; i < elems.length; i++) {
-            elems[i].setAttribute(attribute, attribute);
-          }
-        }
-      } else {
-        throw new TypeError('Exception add attribute all: target is not valid type');
-      }
+      var elems = document.querySelectorAll(target);
+      [].forEach.call(elems, function (elem) {
+        elem.setAttribute(attribute, attribute);
+      });
     },
 
     removeAttributeAll: function (target, attribute) {
-      if (typeof target === 'string') {
-        var elems = document.querySelectorAll(target);
-        if (elems !== null) {
-          for (var i = 0; i < elems.length; i++) {
-            elems[i].removeAttribute(attribute);
-          }
-        }
-      } else {
-        throw new TypeError('Exception remove attribute all: target is not valid type');
-      }
+      var elems = document.querySelectorAll(target);
+      [].forEach.call(elems, function (elem) {
+        elem.removeAttribute(attribute, attribute);
+      });
     }
   };
 })();

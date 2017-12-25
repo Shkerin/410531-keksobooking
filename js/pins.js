@@ -42,13 +42,13 @@
   var renderPins = function (pins) {
     var frag = document.createDocumentFragment();
 
-    for (var i = 0; i < pins.length; i++) {
-      pins[i].uid = i;
-      var pinElem = createPinElem(pins[i]);
+    pins.forEach(function (value, idx) {
+      value.uid = idx;
+      var pinElem = createPinElem(value);
       frag.appendChild(pinElem);
 
       pinElem.addEventListener('click', clickPinHandler);
-    }
+    });
 
     document.querySelector('.map__pins').appendChild(frag);
   };

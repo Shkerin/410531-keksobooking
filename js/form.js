@@ -47,9 +47,9 @@
   var validationForm = function () {
     var result = true;
     var validationError = function () {
-      for (var i = 0; i < arguments.length; i++) {
-        arguments[i].style = 'border-color: red';
-      }
+      [].forEach.call(arguments, function (elem) {
+        elem.style = 'border-color: red';
+      });
       result = false;
     };
 
