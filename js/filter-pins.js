@@ -48,8 +48,11 @@
       if (result) {
         var filterElems = document.querySelector('#housing-features').children;
         for (var i = 0; i < filterElems.length; i++) {
+          if (!result) {
+            break;
+          }
           var elem = filterElems[i];
-          if (result && elem.name === 'features' && elem.checked) {
+          if (elem.name === 'features' && elem.checked) {
             result = filterFeature(elem, offer);
           }
         }
