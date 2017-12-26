@@ -24,9 +24,9 @@
   var showCard = function (elem, mapPins) {
     var data = elem.dataset;
     if (mapPinActive) {
-      var popup = document.querySelector('.popup');
-      card.update(popup, mapPins[data.uid]);
-      popup.classList.remove('hidden');
+      var popupElem = document.querySelector('.popup');
+      popupElem.classList.remove('hidden');
+      card.update(popupElem, mapPins[data.uid]);
       mapPinActive.classList.remove('map__pin--active');
     } else {
       card.render(mapPins[data.uid]);
@@ -41,11 +41,12 @@
   };
 
   var hideCard = function () {
-    var popupElem = document.querySelector('.popup');
-    if (popupElem) {
+    if (mapPinActive) {
+      var popupElem = document.querySelector('.popup');
       var popupCloseElem = popupElem.querySelector('.popup__close');
 
       popupElem.classList.add('hidden');
+      mapPinActive.classList.remove('map__pin--active');
 
       document.removeEventListener('keydown', escKeydownPopupHandler);
       popupCloseElem.removeEventListener('click', clickPopupCloseHandler);
