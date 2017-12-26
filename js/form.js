@@ -9,76 +9,77 @@
   var backend = window.backend;
 
   var TIMES = ['12:00', '13:00', '14:00'];
-  var TYPES = ['flat', 'bungalo', 'house', 'palace'];
-  var PRICES = [1000, 0, 5000, 10000];
+  var ROOMS = [1, 2, 3, 100];
+  var PRICE_MAX = 1000000;
+  var BORDER_VALID_STYLE = 'border: 1px solid #d9d9d3';
+  var BORDER_ERROR_STYLE = 'border: 1px solid red';
+  var TITLE_LIMIT = {
+    'min': 30,
+    'max': 100
+  };
 
   var formElem = document.querySelector('.notice__form');
-
-  // Синхранизация полей «время заезда» и «время выезда»
+  var titleElem = formElem.querySelector('#title');
+  var addressElem = formElem.querySelector('#address');
+  var typeElem = formElem.querySelector('#type');
+  var priceElem = formElem.querySelector('#price');
   var timeInElem = formElem.querySelector('#timein');
   var timeOutElem = formElem.querySelector('#timeout');
+  var roomElem = formElem.querySelector('#room_number');
+  var capacityElem = formElem.querySelector('#capacity');
 
   var syncValues = function (element, value) {
     element.value = value;
   };
 
+  // Синхранизация полей «время заезда» и «время выезда»
   window.synchronizeFields(timeInElem, timeOutElem, TIMES, TIMES, syncValues);
 
-  // Синхронизация поля «тип жилья» с минимальной ценой поля «цена за ночь»
-  var typeElem = formElem.querySelector('#type');
-  var priceElem = formElem.querySelector('#price');
-
-  var syncValueWithMin = function (element, value) {
-    element.min = value;
-  };
-
-  // Односторонняя синхронизация значения первого поля с минимальным значением второго
-  window.synchronizeFields(typeElem, priceElem, TYPES, PRICES, syncValueWithMin);
-
   // Синхронизация поля «количество комнат» с полем «количество мест»
-  var roomElem = formElem.querySelector('#room_number');
-  var capacityElem = formElem.querySelector('#capacity');
-
-  var rooms = [1, 2, 3, 100];
   var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
-  window.synchronizeFields(roomElem, capacityElem, rooms, capacities, syncValues);
+  window.synchronizeFields(roomElem, capacityElem, ROOMS, capacities, syncValues);
+
+  // Сбросить стили для всех полей
+  var resetStyle = function () {
+    titleElem.style = BORDER_VALID_STYLE;
+    addressElem.style = BORDER_VALID_STYLE;
+    typeElem.style = BORDER_VALID_STYLE;
+    priceElem.style = BORDER_VALID_STYLE;
+    timeInElem.style = BORDER_VALID_STYLE;
+    timeOutElem.style = BORDER_VALID_STYLE;
+    roomElem.style = BORDER_VALID_STYLE;
+    capacityElem.style = BORDER_VALID_STYLE;
+  };
 
   // Валидация полей
   var validationForm = function () {
     var result = true;
-    var validationError = function () {
+
+    // Установить стиль для поля с ошибкой валидации
+    var setStyleError = function () {
       [].forEach.call(arguments, function (elem) {
-        elem.style = 'border-color: red';
+        elem.style = BORDER_ERROR_STYLE;
       });
       result = false;
     };
 
-    var titleElem = formElem.querySelector('#title');
-    if (titleElem.value.length < 30 || titleElem.value.length > 100) {
-      validationError(titleElem.style);
+    if (titleElem.value.length > TITLE_LIMIT.max || titleElem.value.length < TITLE_LIMIT.min) {
+      setStyleError(titleElem);
     }
 
-    var addressElem = formElem.querySelector('#address');
+    if (priceElem.value > PRICE_MAX) {
+      setStyleError(priceElem);
+    }
+
+    if ((typeElem.selectedIndex === 0 && priceElem.value < 1000) ||
+      (typeElem.selectedIndex === 1 && priceElem.value < 0) ||
+      (typeElem.selectedIndex === 2 && priceElem.value < 5000) ||
+      (typeElem.selectedIndex === 3 && priceElem.value < 10000)) {
+      setStyleError(priceElem);
+    }
+
     if (addressElem.value === '') {
-      validationError(addressElem);
-    }
-
-    if ((typeElem.selectedIndex === 0 && priceElem.value < PRICES[0]) ||
-      (typeElem.selectedIndex === 1 && priceElem.value < PRICES[1]) ||
-      (typeElem.selectedIndex === 2 && priceElem.value < PRICES[2]) ||
-      (typeElem.selectedIndex === 3 && priceElem.value < PRICES[3])) {
-      validationError(typeElem, priceElem);
-    }
-
-    if (timeInElem.selectedIndex !== timeOutElem.selectedIndex) {
-      validationError(timeInElem, timeOutElem);
-    }
-
-    if ((roomElem.selectedIndex === 0 && capacityElem.selectedIndex !== 2) ||
-      (roomElem.selectedIndex === 1 && !utils.isContains([1, 2], capacityElem.selectedIndex)) ||
-      (roomElem.selectedIndex === 2 && !utils.isContains([0, 1, 2], capacityElem.selectedIndex)) ||
-      (roomElem.selectedIndex === 3 && capacityElem.selectedIndex !== 3)) {
-      validationError(roomElem, capacityElem);
+      setStyleError(addressElem);
     }
 
     return result;
@@ -87,7 +88,6 @@
   // Обработчик сброса значений полей формы после отправки данных на сервер
   var loadHandler = function () {
     formElem.querySelector('#title').value = '';
-    formElem.querySelector('#address').value = '';
     formElem.querySelector('#type').value = 'flat';
     formElem.querySelector('#price').value = '1000';
     formElem.querySelector('#timein').value = '12:00';
@@ -106,6 +106,8 @@
 
   formElem.addEventListener('submit', function (evt) {
     evt.preventDefault();
+
+    resetStyle();
 
     if (validationForm()) {
       backend.savePin(new FormData(formElem), loadHandler, window.error.show);
