@@ -7,8 +7,8 @@
 (function () {
   var utils = window.utils;
 
-  var MIN_COORD_Y = 100;
-  var MAX_COORD_Y = 650;
+  var MIN_COORD_Y = 59;
+  var MAX_COORD_Y = 459;
   var IMG_HEIGHT = 62;
   var PIN_HEIGHT = 10;
 
@@ -37,33 +37,39 @@
     return window.scrollY || window.scrollTop || htmlElem.scrollTop;
   };
 
-  // Перемещение главного пина по карте и вывод его координат в поле адреса
+  // Вычисление координат главного пина с учётом вертикальной прокрутки
+  var calculateCoords = function (evt) {
+    var addressElem = document.querySelector('#address');
+
+    var coordX = Math.floor(evt.clientX - mapElem.offsetLeft);
+    var coordY = Math.floor(evt.clientY - mapElem.offsetTop + getScrollOffset());
+
+    // Ограничить перемещение главного пина
+    if (coordY < MIN_COORD_Y) {
+      coordY = MIN_COORD_Y;
+    } else if (coordY > MAX_COORD_Y) {
+      coordY = MAX_COORD_Y;
+    }
+
+    pinMainElem.style.left = coordX + 'px';
+    pinMainElem.style.top = coordY + 'px';
+
+    // Вывести координаты в поле адреса с учётом острия главного пина
+    coordY += (IMG_HEIGHT / 2) + PIN_HEIGHT;
+
+    addressElem.value = 'x: ' + coordX + ', y: ' + coordY;
+  };
+
+  // Обработчики перемещения главного пина по карте и вывод его координат в поле адреса
   pinMainElem.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    var addressElem = document.querySelector('#address');
+    calculateCoords(evt);
 
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
-      // Вычислить координаты главного пина с учётом вертикальной прокрутки
-      var coordX = moveEvt.clientX - mapElem.offsetLeft;
-      var coordY = moveEvt.clientY - mapElem.offsetTop + getScrollOffset();
-
-      // Ограничить перемещение главного пина
-      if (coordY < MIN_COORD_Y) {
-        coordY = MIN_COORD_Y;
-      } else if (coordY > MAX_COORD_Y) {
-        coordY = MAX_COORD_Y;
-      }
-
-      pinMainElem.style.left = coordX + 'px';
-      pinMainElem.style.top = coordY + 'px';
-
-      // Вывести координаты в поле адреса с учётом острия главного пина
-      coordY += (IMG_HEIGHT / 2) + PIN_HEIGHT;
-
-      addressElem.value = 'x: ' + coordX + ', y: ' + coordY;
+      calculateCoords(moveEvt);
     };
 
     var mouseUpHandler = function (upEvt) {
