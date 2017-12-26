@@ -11,6 +11,7 @@
   var MAX_COORD_Y = 459;
   var IMG_HEIGHT = 62;
   var PIN_HEIGHT = 10;
+  var EDGE_MAIN_PIN = (IMG_HEIGHT / 2) + PIN_HEIGHT;
 
   var htmlElem = document.querySelector('html');
   var mapElem = document.querySelector('.map');
@@ -55,7 +56,7 @@
     pinMainElem.style.top = coordY + 'px';
 
     // Вывести координаты в поле адреса с учётом острия главного пина
-    coordY += (IMG_HEIGHT / 2) + PIN_HEIGHT;
+    coordY += EDGE_MAIN_PIN;
 
     addressElem.value = 'x: ' + coordX + ', y: ' + coordY;
   };

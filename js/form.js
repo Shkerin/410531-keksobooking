@@ -13,7 +13,7 @@
   var PRICE_MAX = 1000000;
   var BORDER_VALID_STYLE = 'border: 1px solid #d9d9d3';
   var BORDER_ERROR_STYLE = 'border: 1px solid red';
-  var TITLE_LIMIT = {
+  var TITLE_LIMITS = {
     'min': 30,
     'max': 100
   };
@@ -63,7 +63,7 @@
       result = false;
     };
 
-    if (titleElem.value.length > TITLE_LIMIT.max || titleElem.value.length < TITLE_LIMIT.min) {
+    if (titleElem.value.length > TITLE_LIMITS.max || titleElem.value.length < TITLE_LIMITS.min) {
       setStyleError(titleElem);
     }
 

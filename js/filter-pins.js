@@ -6,19 +6,12 @@
     'max': 50000
   };
 
-  var filterFeature = function (elem, offer) {
-    var flag = false;
-    for (var i = 0; i < offer.features.length; i++) {
-      var feature = offer.features[i];
-      if (elem.value === feature) {
-        flag = true;
-        break;
-      }
-    }
-    return flag;
-  };
-
   var filterPins = function (pins) {
+    var featuresElems = document.querySelector('#housing-features').children;
+    var filterElems = [].filter.call(featuresElems, function (elem) {
+      return elem.name === 'features' && elem.checked;
+    });
+
     return pins.filter(function (pin) {
       var offer = pin.offer;
       var result = typeElem.value === 'any' || typeElem.value === offer.type;
@@ -45,16 +38,16 @@
         result = guestsElem.value === ('' + offer.guests);
       }
 
-      if (result) {
-        var filterElems = document.querySelector('#housing-features').children;
-        for (var i = 0; i < filterElems.length; i++) {
-          if (!result) {
-            break;
-          }
-          var elem = filterElems[i];
-          if (elem.name === 'features' && elem.checked) {
-            result = filterFeature(elem, offer);
-          }
+      if (result && filterElems.length > 0) {
+        if (offer.features.length === 0) {
+          result = false;
+        } else {
+          var everyCallback = function (elem) {
+            return offer.features.some(function (feature) {
+              return elem.value === feature;
+            });
+          };
+          result = filterElems.every(everyCallback);
         }
       }
 
