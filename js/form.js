@@ -39,7 +39,7 @@
   var roomElem = formElem.querySelector('#room_number');
   var capacityElem = formElem.querySelector('#capacity');
 
-  var rooms = [utils.getRandomInt(1, 3), utils.getRandomInt(1, 2), 1, 100];
+  var rooms = [1, 2, 3, 100];
   var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
   window.synchronizeFields(roomElem, capacityElem, rooms, capacities, syncValues);
 
@@ -84,7 +84,7 @@
     return result;
   };
 
-  // Отправка данных на сервер
+  // Обработчик сброса значений полей формы после отправки данных на сервер
   var loadHandler = function () {
     formElem.querySelector('#title').value = '';
     formElem.querySelector('#address').value = '';
