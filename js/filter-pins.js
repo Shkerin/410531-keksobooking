@@ -6,6 +6,18 @@
     'max': 50000
   };
 
+  var filterFeature = function (elem, offer) {
+    var flag = false;
+    for (var i = 0; i < offer.features.length; i++) {
+      var feature = offer.features[i];
+      if (elem.value === feature) {
+        flag = true;
+        break;
+      }
+    }
+    return flag;
+  };
+
   var filterPins = function (pins) {
     return pins.filter(function (pin) {
       var offer = pin.offer;
@@ -33,48 +45,29 @@
         result = guestsElem.value === ('' + offer.guests);
       }
 
-      var filterFeature = function (elem, offerList) {
-        var flag = false;
-        for (var i = 0; i < offerList.features.length; i++) {
-          var feature = offerList.features[i];
-          if (elem.value === feature) {
-            flag = true;
-            break;
+      if (result) {
+        var filterElems = document.querySelector('#housing-features').children;
+        for (var i = 0; i < filterElems.length; i++) {
+          var elem = filterElems[i];
+          if (result && elem.name === 'features' && elem.checked) {
+            result = filterFeature(elem, offer);
           }
         }
-        return flag;
-      };
-
-      if (result && filterWifiElem.checked) {
-        result = filterFeature(filterWifiElem, offer);
-      }
-
-      if (result && filterDishwasherElem.checked) {
-        result = filterFeature(filterDishwasherElem, offer);
-      }
-
-      if (result && filterParkingElem.checked) {
-        result = filterFeature(filterParkingElem, offer);
-      }
-
-      if (result && filterWasherElem.checked) {
-        result = filterFeature(filterWasherElem, offer);
-      }
-
-      if (result && filterElevatorElem.checked) {
-        result = filterFeature(filterElevatorElem, offer);
-      }
-
-      if (result && filterConditionerElem.checked) {
-        result = filterFeature(filterConditionerElem, offer);
       }
 
       return result;
     });
   };
 
+  var lastTimeout;
   var changeHousingHandler = function () {
-    window.pins.update();
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(function () {
+      window.displayCard.hide();
+      window.pins.update();
+    }, 300);
   };
 
   var typeElem = document.querySelector('#housing-type');

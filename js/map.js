@@ -6,7 +6,6 @@
 
 (function () {
   var utils = window.utils;
-  var pins = window.pins;
 
   var MIN_COORD_Y = 100;
   var MAX_COORD_Y = 650;
@@ -26,7 +25,7 @@
     noticeHeaderElem.removeAttribute('disabled');
     utils.removeAttributeAll('.form__element', 'disabled');
 
-    pins.render();
+    window.pins.render();
 
     pinMainElem.removeEventListener('mouseup', showMapHandler);
   };

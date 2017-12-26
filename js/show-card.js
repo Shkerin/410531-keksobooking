@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Модуль для обработки событий показа и скрытия карточки
+ */
+
 (function () {
   var utils = window.utils;
   var card = window.card;
@@ -38,13 +42,18 @@
 
   var hideCard = function () {
     var popupElem = document.querySelector('.popup');
-    var popupCloseElem = popupElem.querySelector('.popup__close');
+    if (popupElem) {
+      var popupCloseElem = popupElem.querySelector('.popup__close');
 
-    popupElem.classList.add('hidden');
+      popupElem.classList.add('hidden');
 
-    document.removeEventListener('keydown', escKeydownPopupHandler);
-    popupCloseElem.removeEventListener('click', clickPopupCloseHandler);
+      document.removeEventListener('keydown', escKeydownPopupHandler);
+      popupCloseElem.removeEventListener('click', clickPopupCloseHandler);
+    }
   };
 
-  window.showCard = showCard;
+  window.displayCard = {
+    show: showCard,
+    hide: hideCard
+  };
 })();
