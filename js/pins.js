@@ -13,7 +13,7 @@
 
   var clickPinHandler = function (evt) {
     var elem = evt.currentTarget;
-    window.showCard(elem, filterPins);
+    window.displayCard.show(elem, filterPins);
   };
 
   var createPinElem = function (pin) {
@@ -61,8 +61,11 @@
 
   var loadAndRender = function () {
     var loadHandler = function (data) {
-      sourcePins = data;
-      updatePins();
+      sourcePins = data.filter(function (elem, idx) {
+        return idx < 5;
+      });
+      filterPins = sourcePins;
+      renderPins(sourcePins);
     };
 
     window.backend.loadPins(loadHandler, window.error.show);
