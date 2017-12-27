@@ -8,106 +8,109 @@
   var utils = window.utils;
   var backend = window.backend;
 
-  // Синхранизация полей «время заезда» и «время выезда»
-  var timeInElem = document.querySelector('#timein');
-  var timeOutElem = document.querySelector('#timeout');
+  var TIMES = ['12:00', '13:00', '14:00'];
+  var ROOMS = [1, 2, 3, 100];
+  var PRICE_MAX = 1000000;
+  var BORDER_VALID_STYLE = 'border: 1px solid #d9d9d3';
+  var BORDER_ERROR_STYLE = 'border: 1px solid red';
+  var TITLE_LIMITS = {
+    'min': 30,
+    'max': 100
+  };
+
+  var formElem = document.querySelector('.notice__form');
+  var titleElem = formElem.querySelector('#title');
+  var addressElem = formElem.querySelector('#address');
+  var typeElem = formElem.querySelector('#type');
+  var priceElem = formElem.querySelector('#price');
+  var timeInElem = formElem.querySelector('#timein');
+  var timeOutElem = formElem.querySelector('#timeout');
+  var roomElem = formElem.querySelector('#room_number');
+  var capacityElem = formElem.querySelector('#capacity');
 
   var syncValues = function (element, value) {
     element.value = value;
   };
 
-  var timeArray = ['12:00', '13:00', '14:00'];
-  window.synchronizeFields(timeInElem, timeOutElem, timeArray, timeArray, syncValues);
-
-  // Синхронизация поля «тип жилья» с минимальной ценой поля «цена за ночь»
-  var typeElem = document.querySelector('#type');
-  var priceElem = document.querySelector('#price');
-
-  var syncValueWithMin = function (element, value) {
-    element.min = value;
-  };
-
-  // Односторонняя синхронизация значения первого поля с минимальным значением второго
-  var typeArray = ['flat', 'bungalo', 'house', 'palace'];
-  var priceArray = [1000, 0, 5000, 10000];
-  window.synchronizeFields(typeElem, priceElem, typeArray, priceArray, syncValueWithMin);
+  // Синхранизация полей «время заезда» и «время выезда»
+  window.synchronizeFields(timeInElem, timeOutElem, TIMES, TIMES, syncValues);
 
   // Синхронизация поля «количество комнат» с полем «количество мест»
-  var roomNumElem = document.querySelector('#room_number');
-  var capacityElem = document.querySelector('#capacity');
+  var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
+  window.synchronizeFields(roomElem, capacityElem, ROOMS, capacities, syncValues);
 
-  var roomNumArray = [utils.getRandomInt(1, 3), utils.getRandomInt(1, 2), 1, 100];
-  var capacityArray = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
-  window.synchronizeFields(roomNumElem, capacityElem, roomNumArray, capacityArray, syncValues);
+  // Сбросить стили для всех полей
+  var resetStyle = function () {
+    titleElem.style = BORDER_VALID_STYLE;
+    addressElem.style = BORDER_VALID_STYLE;
+    typeElem.style = BORDER_VALID_STYLE;
+    priceElem.style = BORDER_VALID_STYLE;
+    timeInElem.style = BORDER_VALID_STYLE;
+    timeOutElem.style = BORDER_VALID_STYLE;
+    roomElem.style = BORDER_VALID_STYLE;
+    capacityElem.style = BORDER_VALID_STYLE;
+  };
 
   // Валидация полей
   var validationForm = function () {
     var result = true;
-    var validationError = function () {
-      for (var i = 0; i < arguments.length; i++) {
-        arguments[i].style = 'border-color: red';
-      }
+
+    // Установить стиль для поля с ошибкой валидации
+    var setStyleError = function () {
+      [].forEach.call(arguments, function (elem) {
+        elem.style = BORDER_ERROR_STYLE;
+      });
       result = false;
     };
 
-    var titleElem = document.querySelector('#title');
-    if (titleElem.value.length < 30 || titleElem.value.length > 100) {
-      validationError(titleElem.style);
+    if (titleElem.value.length > TITLE_LIMITS.max || titleElem.value.length < TITLE_LIMITS.min) {
+      setStyleError(titleElem);
     }
 
-    var addressElem = document.querySelector('#address');
-    if (addressElem.value === '') {
-      validationError(addressElem);
+    if (priceElem.value > PRICE_MAX) {
+      setStyleError(priceElem);
     }
 
     if ((typeElem.selectedIndex === 0 && priceElem.value < 1000) ||
       (typeElem.selectedIndex === 1 && priceElem.value < 0) ||
       (typeElem.selectedIndex === 2 && priceElem.value < 5000) ||
       (typeElem.selectedIndex === 3 && priceElem.value < 10000)) {
-      validationError(typeElem, priceElem);
+      setStyleError(priceElem);
     }
 
-    if (timeInElem.selectedIndex !== timeOutElem.selectedIndex) {
-      validationError(timeInElem, timeOutElem);
-    }
-
-    if ((roomNumElem.selectedIndex === 0 && capacityElem.selectedIndex !== 2) ||
-      (roomNumElem.selectedIndex === 1 && !utils.isContains([1, 2], capacityElem.selectedIndex)) ||
-      (roomNumElem.selectedIndex === 2 && !utils.isContains([0, 1, 2], capacityElem.selectedIndex)) ||
-      (roomNumElem.selectedIndex === 3 && capacityElem.selectedIndex !== 3)) {
-      validationError(roomNumElem, capacityElem);
+    if (addressElem.value === '') {
+      setStyleError(addressElem);
     }
 
     return result;
   };
 
-  // Отправка данных на сервер
-  var noticeFormElem = document.querySelector('.notice__form');
-
+  // Обработчик сброса значений полей формы после отправки данных на сервер
   var loadHandler = function () {
-    noticeFormElem.querySelector('#title').value = '';
-    noticeFormElem.querySelector('#address').value = '';
-    noticeFormElem.querySelector('#type').value = 'flat';
-    noticeFormElem.querySelector('#price').value = '1000';
-    noticeFormElem.querySelector('#timein').value = '12:00';
-    noticeFormElem.querySelector('#timeout').value = '12:00';
-    noticeFormElem.querySelector('#room_number').value = 1;
-    noticeFormElem.querySelector('#capacity').value = 3;
-    noticeFormElem.querySelector('#description').value = '';
+    formElem.querySelector('#title').value = '';
+    formElem.querySelector('#type').value = 'flat';
+    formElem.querySelector('#price').value = '1000';
+    formElem.querySelector('#timein').value = '12:00';
+    formElem.querySelector('#timeout').value = '12:00';
+    formElem.querySelector('#room_number').value = 1;
+    formElem.querySelector('#capacity').value = 3;
+    formElem.querySelector('#description').value = '';
 
-    noticeFormElem.querySelector('#feature-wifi').checked = false;
-    noticeFormElem.querySelector('#feature-dishwasher').checked = false;
-    noticeFormElem.querySelector('#feature-parking').checked = false;
-    noticeFormElem.querySelector('#feature-washer').checked = false;
-    noticeFormElem.querySelector('#feature-elevator').checked = false;
-    noticeFormElem.querySelector('#feature-conditioner').checked = false;
+    formElem.querySelector('#feature-wifi').checked = false;
+    formElem.querySelector('#feature-dishwasher').checked = false;
+    formElem.querySelector('#feature-parking').checked = false;
+    formElem.querySelector('#feature-washer').checked = false;
+    formElem.querySelector('#feature-elevator').checked = false;
+    formElem.querySelector('#feature-conditioner').checked = false;
   };
 
-  noticeFormElem.addEventListener('submit', function (evt) {
+  formElem.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
+    resetStyle();
+
     if (validationForm()) {
-      backend.savePin(new FormData(noticeFormElem), loadHandler, window.error.showErrorWindow);
+      backend.savePin(new FormData(formElem), loadHandler, window.error.show);
     }
   });
 })();

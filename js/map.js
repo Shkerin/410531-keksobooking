@@ -6,18 +6,27 @@
 
 (function () {
   var utils = window.utils;
-  var pins = window.pins;
 
-  var pinMainElem = document.querySelector('.map__pin--main');
+  var MIN_COORD_Y = 59;
+  var MAX_COORD_Y = 459;
+  var IMG_HEIGHT = 62;
+  var PIN_HEIGHT = 10;
+  var EDGE_MAIN_PIN = (IMG_HEIGHT / 2) + PIN_HEIGHT;
+
+  var htmlElem = document.querySelector('html');
   var mapElem = document.querySelector('.map');
+  var pinMainElem = mapElem.querySelector('.map__pin--main');
 
   var showMapHandler = function () {
-    utils.removeClass('.map', 'map--faded');
-    utils.removeClass('.notice__form', 'notice__form--disabled');
-    utils.removeAttribute('.notice__header', 'disabled');
+    var formElem = document.querySelector('.notice__form');
+    var noticeHeaderElem = document.querySelector('.notice__header');
+
+    mapElem.classList.remove('map--faded');
+    formElem.classList.remove('notice__form--disabled');
+    noticeHeaderElem.removeAttribute('disabled');
     utils.removeAttributeAll('.form__element', 'disabled');
 
-    pins.render();
+    window.pins.render();
 
     pinMainElem.removeEventListener('mouseup', showMapHandler);
   };
@@ -26,41 +35,42 @@
 
   // Вычисление смещения прокрутки
   var getScrollOffset = function () {
-    return window.scrollY || window.scrollTop ||
-      document.getElementsByTagName('html')[0].scrollTop;
+    return window.scrollY || window.scrollTop || htmlElem.scrollTop;
   };
 
-  // Перемещение главного пина по карте и вывод его координат в поле адреса
+  // Вычисление координат главного пина с учётом вертикальной прокрутки
+  var calculateCoords = function (evt) {
+    var addressElem = document.querySelector('#address');
+
+    var coordX = Math.floor(evt.clientX - mapElem.offsetLeft);
+    var coordY = Math.floor(evt.clientY - mapElem.offsetTop + getScrollOffset());
+
+    // Ограничить перемещение главного пина
+    if (coordY < MIN_COORD_Y) {
+      coordY = MIN_COORD_Y;
+    } else if (coordY > MAX_COORD_Y) {
+      coordY = MAX_COORD_Y;
+    }
+
+    pinMainElem.style.left = coordX + 'px';
+    pinMainElem.style.top = coordY + 'px';
+
+    // Вывести координаты в поле адреса с учётом острия главного пина
+    coordY += EDGE_MAIN_PIN;
+
+    addressElem.value = 'x: ' + coordX + ', y: ' + coordY;
+  };
+
+  // Обработчики перемещения главного пина по карте и вывод его координат в поле адреса
   pinMainElem.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    var addressElem = document.querySelector('#address');
+    calculateCoords(evt);
 
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
-      // Вычислить координаты главного пина с учётом вертикальной прокрутки
-      var coordX = moveEvt.clientX - mapElem.offsetLeft;
-      var coordY = moveEvt.clientY - mapElem.offsetTop + getScrollOffset();
-
-      // Ограничить перемещение главного пина
-      var minCoordY = 100;
-      var maxCoordY = 650;
-      if (coordY < minCoordY) {
-        coordY = minCoordY;
-      } else if (coordY > maxCoordY) {
-        coordY = maxCoordY;
-      }
-
-      pinMainElem.style.left = coordX + 'px';
-      pinMainElem.style.top = coordY + 'px';
-
-      // Вывести координаты в поле адреса с учётом острия главного пина
-      var imageHeight = 62;
-      var pinHeight = 10;
-      coordY += (imageHeight / 2) + pinHeight;
-
-      addressElem.value = 'x: ' + coordX + ', y: ' + coordY;
+      calculateCoords(moveEvt);
     };
 
     var mouseUpHandler = function (upEvt) {

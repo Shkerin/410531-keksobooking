@@ -14,14 +14,8 @@
       }
     },
 
-    isEnterEvent: function (evt, action) {
-      if (evt.keyCode === consts.ENTER_KEYCODE) {
-        action(evt);
-      }
-    },
-
-    isContains: function (arr, elem) {
-      return arr.indexOf(elem) !== -1;
+    isContains: function (array, elem) {
+      return array.indexOf(elem) !== -1;
     },
 
     isNumeric: function (num) {
@@ -31,11 +25,8 @@
     getRandomInt: function () {
       if (arguments.length === 1) {
         return this._getRandomIntMinMax(0, arguments[0]);
-      } else if (arguments.length === 2) {
-        return this._getRandomIntMinMax(arguments[0], arguments[1]);
-      } else {
-        throw new TypeError('Exception of computing a random value: invalid number of arguments');
       }
+      return this._getRandomIntMinMax(arguments[0], arguments[1]);
     },
 
     _getRandomIntMinMax: function (min, max) {
@@ -51,124 +42,18 @@
       return Math.floor(rand) + min;
     },
 
-    getRandomValueFromArray: function (array) {
-      if (!(array instanceof Array)) {
-        throw new TypeError('Exception of computing a random value: argument function is not array');
-      }
-
-      var idx = this.getRandomInt(0, array.length - 1);
-      var val = array[idx];
-      if (array.length > 0) {
-        array.splice(idx, 1);
-      }
-
-      return val;
-    },
-
-    addClass: function (target, className) {
-      if (typeof className !== 'string') {
-        throw new TypeError('Exception add class: className is not valid type');
-      }
-
-      if (target instanceof HTMLElement) {
-        target.classList.add(className);
-      } else if (typeof target === 'string') {
-        var elem = document.querySelector(target);
-        if (elem !== null) {
-          elem.classList.add(className);
-        }
-      } else {
-        throw new TypeError('Exception add class: target is not valid type');
-      }
-    },
-
-    removeClass: function (target, className) {
-      if (typeof className !== 'string') {
-        throw new TypeError('Exception remove class: className is not valid type');
-      }
-
-      if (target instanceof HTMLElement) {
-        target.classList.remove(className);
-      } else if (typeof target === 'string') {
-        var elem = document.querySelector(target);
-        if (elem !== null) {
-          elem.classList.remove(className);
-        }
-      } else {
-        throw new TypeError('Exception remove class: target is not valid type');
-      }
-    },
-
-    addAttribute: function (target, attribute) {
-      if (typeof attribute !== 'string') {
-        throw new TypeError('Exception add attribute: attribute is not valid type');
-      }
-
-      if (target instanceof HTMLElement) {
-        target.setAttribute(attribute, attribute);
-      } else if (typeof target === 'string') {
-        var elem = document.querySelector(target);
-        if (elem !== null) {
-          elem.setAttribute(attribute, attribute);
-        }
-      } else {
-        throw new TypeError('Exception add attribute: target is not valid type');
-      }
-    },
-
     addAttributeAll: function (target, attribute) {
-      if (typeof attribute !== 'string') {
-        throw new TypeError('Exception add attribute all: attribute is not valid type');
-      }
-
-      if (target instanceof HTMLElement) {
-        this.addAttribute(target, attribute);
-      } else if (typeof target === 'string') {
-        var elems = document.querySelectorAll(target);
-        if (elems !== null) {
-          for (var i = 0; i < elems.length; i++) {
-            this.addAttribute(elems[i], attribute);
-          }
-        }
-      } else {
-        throw new TypeError('Exception add attribute all: target is not valid type');
-      }
-    },
-
-    removeAttribute: function (target, attribute) {
-      if (typeof attribute !== 'string') {
-        throw new TypeError('Exception remove attribute: attribute is not valid type');
-      }
-
-      if (target instanceof HTMLElement) {
-        target.removeAttribute(attribute);
-      } else if (typeof target === 'string') {
-        var elem = document.querySelector(target);
-        if (elem !== null) {
-          elem.removeAttribute(attribute);
-        }
-      } else {
-        throw new TypeError('Exception remove attribute: target is not valid type');
-      }
+      var elems = document.querySelectorAll(target);
+      [].forEach.call(elems, function (elem) {
+        elem.setAttribute(attribute, attribute);
+      });
     },
 
     removeAttributeAll: function (target, attribute) {
-      if (typeof attribute !== 'string') {
-        throw new TypeError('Exception remove attribute all: attribute is not valid type');
-      }
-
-      if (target instanceof HTMLElement) {
-        target.removeAttribute(attribute);
-      } else if (typeof target === 'string') {
-        var elems = document.querySelectorAll(target);
-        if (elems !== null) {
-          for (var i = 0; i < elems.length; i++) {
-            elems[i].removeAttribute(attribute);
-          }
-        }
-      } else {
-        throw new TypeError('Exception remove attribute all: target is not valid type');
-      }
+      var elems = document.querySelectorAll(target);
+      [].forEach.call(elems, function (elem) {
+        elem.removeAttribute(attribute, attribute);
+      });
     }
   };
 })();

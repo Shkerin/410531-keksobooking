@@ -5,6 +5,17 @@
  */
 
 (function () {
+  var PIN_TYPES = {
+    'flat': 'Квартира',
+    'bungalo': 'Бунгало',
+    'house': 'Дом'
+  };
+
+  var SIZE_PICTURE = {
+    'width': '50px',
+    'height': '50px'
+  };
+
   var updateCard = function (elem, pin) {
     var offer = pin.offer;
 
@@ -20,23 +31,31 @@
       'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
 
     // Заполнение типа жилья
-    var pinTypes = {
-      'flat': 'Квартира',
-      'bungalo': 'Бунгало',
-      'house': 'Дом'
-    };
-    elem.querySelector('h4').textContent = pinTypes[offer.type];
+    elem.querySelector('h4').textContent = PIN_TYPES[offer.type];
 
-    // Заполнение удобств в квартире
+    // Заполнение удобств
     var featuresElem = elem.querySelector('.popup__features');
     while (featuresElem.children.length) {
       featuresElem.removeChild(featuresElem.lastElementChild);
     }
-    for (var i = 0; i < offer.features.length; i++) {
+    offer.features.forEach(function (value) {
       var featureElem = document.createElement('li');
-      featureElem.className = 'feature feature--' + offer.features[i];
+      featureElem.className = 'feature feature--' + value;
       featuresElem.appendChild(featureElem);
+    });
+
+    // Заполнение изображений
+    var pictureElem = elem.querySelector('.popup__pictures');
+    while (pictureElem.children.length) {
+      pictureElem.removeChild(pictureElem.lastElementChild);
     }
+    offer.photos.forEach(function (value) {
+      var imgElem = document.createElement('img');
+      imgElem.setAttribute('src', value);
+      imgElem.setAttribute('width', SIZE_PICTURE.width);
+      imgElem.setAttribute('height', SIZE_PICTURE.height);
+      pictureElem.appendChild(imgElem);
+    });
   };
 
   var renderCard = function (pin) {
@@ -50,7 +69,7 @@
   };
 
   window.card = {
-    updateCard: updateCard,
-    renderCard: renderCard
+    render: renderCard,
+    update: updateCard
   };
 })();
