@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var synchronizeFields = function (elem1, elem2, obj1, obj2, callback) {
+  var synchronizeFields = function (elem1, elem2, obj1, obj2, callback, elemToSync) {
 
     var changeHandler = function (evt) {
       var target = evt.target;
@@ -13,7 +13,9 @@
     };
 
     elem1.addEventListener('change', changeHandler);
-    elem2.addEventListener('change', changeHandler);
+    if (elemToSync) {
+      elem2.addEventListener('change', changeHandler);
+    }
   };
 
   window.synchronizeFields = synchronizeFields;

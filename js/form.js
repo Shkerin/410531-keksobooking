@@ -33,11 +33,11 @@
   };
 
   // Синхранизация полей «время заезда» и «время выезда»
-  window.synchronizeFields(timeInElem, timeOutElem, TIMES, TIMES, syncValues);
+  window.synchronizeFields(timeInElem, timeOutElem, TIMES, TIMES, syncValues, true);
 
   // Синхронизация поля «количество комнат» с полем «количество мест»
   var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
-  window.synchronizeFields(roomElem, capacityElem, ROOMS, capacities, syncValues);
+  window.synchronizeFields(roomElem, capacityElem, ROOMS, capacities, syncValues, false);
 
   // Сбросить стили для всех полей
   var resetStyle = function () {
@@ -80,6 +80,15 @@
 
     if (addressElem.value === '') {
       setStyleError(addressElem);
+    }
+
+    if (roomElem.selectedIndex === 0 && capacityElem.value !== '1' ||
+      (roomElem.selectedIndex === 1 &&
+        !(capacityElem.value === '1' || capacityElem.value === '2')) ||
+      (roomElem.selectedIndex === 2 &&
+        !(capacityElem.value === '1' || capacityElem.value === '2' || capacityElem.value === '3')) ||
+        (roomElem.selectedIndex === 3 && capacityElem.value !== '0')) {
+      setStyleError(capacityElem);
     }
 
     return result;
