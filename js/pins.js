@@ -53,7 +53,7 @@
     document.querySelector('.map__pins').appendChild(frag);
   };
 
-  var updatePins = function () {
+  var update = function () {
     removePins();
     filterPins = window.filter(sourcePins);
     renderPins(filterPins);
@@ -68,11 +68,11 @@
       renderPins(sourcePins);
     };
 
-    window.backend.loadPins(loadHandler, window.error.show);
+    window.backend.loadData(loadHandler, window.error.show);
   };
 
   window.pins = {
     render: loadAndRender,
-    update: updatePins
+    update: update
   };
 })();

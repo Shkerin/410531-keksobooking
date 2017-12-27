@@ -119,7 +119,7 @@
     resetStyle();
 
     if (validationForm()) {
-      backend.savePin(new FormData(formElem), function () {}, window.error.show);
+      backend.saveDate(new FormData(formElem), function () {}, window.error.show);
     }
   });
 

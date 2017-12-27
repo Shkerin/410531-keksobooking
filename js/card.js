@@ -16,7 +16,7 @@
     'height': '50px'
   };
 
-  var updateCard = function (elem, pin) {
+  var update = function (elem, pin) {
     var offer = pin.offer;
 
     elem.querySelector('.popup__avatar').setAttribute('src', pin.avatar);
@@ -58,18 +58,18 @@
     });
   };
 
-  var renderCard = function (pin) {
+  var render = function (pin) {
     var popupTemplate = document.querySelector('template');
     var popup = popupTemplate.content.cloneNode(true);
 
-    updateCard(popup, pin);
+    update(popup, pin);
 
     var mapFiltersContainer = document.querySelector('.map__filters-container');
     document.querySelector('.map').insertBefore(popup, mapFiltersContainer);
   };
 
   window.card = {
-    render: renderCard,
-    update: updateCard
+    render: render,
+    update: update
   };
 })();

@@ -43,7 +43,7 @@
   };
 
   window.backend = {
-    loadPins: load,
-    savePin: upload
+    loadData: load,
+    saveDate: upload
   };
 })();

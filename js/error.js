@@ -7,7 +7,7 @@
   var formElem = document.querySelector('.notice__form');
   var headerElem = document.querySelector('.notice__header');
 
-  var showError = function (msg) {
+  var show = function (msg) {
     mapElem.classList.add('map--faded');
     formElem.classList.add('notice__form--disabled');
     headerElem.setAttribute('disabled', 'disabled');
@@ -24,6 +24,6 @@
   };
 
   window.error = {
-    show: showError
+    show: show
   };
 })();
