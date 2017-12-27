@@ -95,7 +95,7 @@
   };
 
   // Обработчик сброса значений полей формы после отправки данных на сервер
-  var loadHandler = function () {
+  var resetHandler = function () {
     formElem.querySelector('#title').value = '';
     formElem.querySelector('#type').value = 'flat';
     formElem.querySelector('#price').value = '1000';
@@ -119,7 +119,14 @@
     resetStyle();
 
     if (validationForm()) {
-      backend.savePin(new FormData(formElem), loadHandler, window.error.show);
+      backend.savePin(new FormData(formElem), function () {}, window.error.show);
     }
+  });
+
+  formElem.addEventListener('reset', function (evt) {
+    evt.preventDefault();
+
+    resetStyle();
+    resetHandler();
   });
 })();
