@@ -39,7 +39,7 @@
   var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
   window.synchronizeFields(roomElem, capacityElem, ROOMS, capacities, syncValues, false);
 
-  // Сбросить стили для всех полей
+  // Сбросить стили для всех полей формы
   var resetStyle = function () {
     titleElem.style = BORDER_VALID_STYLE;
     addressElem.style = BORDER_VALID_STYLE;
@@ -51,7 +51,26 @@
     capacityElem.style = BORDER_VALID_STYLE;
   };
 
-  // Валидация полей
+  // Сбросить значения у всех полей формы
+  var resetFormFields = function () {
+    formElem.querySelector('#title').value = '';
+    formElem.querySelector('#type').value = 'flat';
+    formElem.querySelector('#price').value = '1000';
+    formElem.querySelector('#timein').value = '12:00';
+    formElem.querySelector('#timeout').value = '12:00';
+    formElem.querySelector('#room_number').value = 1;
+    formElem.querySelector('#capacity').value = 3;
+    formElem.querySelector('#description').value = '';
+
+    formElem.querySelector('#feature-wifi').checked = false;
+    formElem.querySelector('#feature-dishwasher').checked = false;
+    formElem.querySelector('#feature-parking').checked = false;
+    formElem.querySelector('#feature-washer').checked = false;
+    formElem.querySelector('#feature-elevator').checked = false;
+    formElem.querySelector('#feature-conditioner').checked = false;
+  };
+
+  // Валидация полей формы
   var validationForm = function () {
     var result = true;
 
@@ -82,35 +101,16 @@
       setStyleError(addressElem);
     }
 
-    if (roomElem.selectedIndex === 0 && capacityElem.value !== '1' ||
+    if ((roomElem.selectedIndex === 0 && capacityElem.value !== '1') ||
       (roomElem.selectedIndex === 1 &&
         !(capacityElem.value === '1' || capacityElem.value === '2')) ||
       (roomElem.selectedIndex === 2 &&
         !(capacityElem.value === '1' || capacityElem.value === '2' || capacityElem.value === '3')) ||
-        (roomElem.selectedIndex === 3 && capacityElem.value !== '0')) {
+      (roomElem.selectedIndex === 3 && capacityElem.value !== '0')) {
       setStyleError(capacityElem);
     }
 
     return result;
-  };
-
-  // Обработчик сброса значений полей формы после отправки данных на сервер
-  var resetHandler = function () {
-    formElem.querySelector('#title').value = '';
-    formElem.querySelector('#type').value = 'flat';
-    formElem.querySelector('#price').value = '1000';
-    formElem.querySelector('#timein').value = '12:00';
-    formElem.querySelector('#timeout').value = '12:00';
-    formElem.querySelector('#room_number').value = 1;
-    formElem.querySelector('#capacity').value = 3;
-    formElem.querySelector('#description').value = '';
-
-    formElem.querySelector('#feature-wifi').checked = false;
-    formElem.querySelector('#feature-dishwasher').checked = false;
-    formElem.querySelector('#feature-parking').checked = false;
-    formElem.querySelector('#feature-washer').checked = false;
-    formElem.querySelector('#feature-elevator').checked = false;
-    formElem.querySelector('#feature-conditioner').checked = false;
   };
 
   formElem.addEventListener('submit', function (evt) {
@@ -127,6 +127,6 @@
     evt.preventDefault();
 
     resetStyle();
-    resetHandler();
+    resetFormFields();
   });
 })();

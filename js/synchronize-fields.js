@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * Модуль для синхронизации полей формы
+ */
+
+
 (function () {
   var synchronizeFields = function (elem1, elem2, obj1, obj2, callback, elemToSync) {
 

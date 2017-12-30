@@ -62,7 +62,7 @@
   var loadAndRender = function () {
     var loadHandler = function (data) {
       sourcePins = data.filter(function (elem, idx) {
-        return idx < 5;
+        return idx < 10;
       });
       filterPins = sourcePins;
       renderPins(sourcePins);

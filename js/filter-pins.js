@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Модуль для фильтрации пинов
+ */
+
 (function () {
   var PRICE = {
     'min': 10000,

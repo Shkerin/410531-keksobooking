@@ -7,8 +7,8 @@
 (function () {
   var utils = window.utils;
 
-  var MIN_COORD_Y = 59;
-  var MAX_COORD_Y = 459;
+  var MIN_COORD_Y = 120;
+  var MAX_COORD_Y = 650;
   var IMG_HEIGHT = 62;
   var PIN_HEIGHT = 10;
   var EDGE_MAIN_PIN = (IMG_HEIGHT / 2) + PIN_HEIGHT;

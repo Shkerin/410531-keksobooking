@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Модуль для вывода модального окна ошибки
+ */
+
 (function () {
   var utils = window.utils;
 
@@ -17,7 +21,7 @@
 
     divError.classList.add('error');
     divError.innerHTML =
-      '<h3>Ошибка отправки данных с сервера</h3>' +
+      '<h3>Ошибка работы с сетью</h3>' +
       '<p>' + msg + '</p>';
 
     mapElem.appendChild(divError);
