@@ -129,4 +129,30 @@
     resetStyle();
     resetFormFields();
   });
+
+  var loadImgHandler = function (aImg) {
+    return function (e) {
+      aImg.src = e.target.result;
+    };
+  };
+
+  var avatarElem = formElem.querySelector('#avatar');
+  avatarElem.addEventListener('change', function (evt) {
+    var files = evt.target.files;
+
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+
+      if (!file.type.startsWith('image/')) {
+        continue;
+      }
+
+      var imgElem = formElem.querySelector('.notice__preview img');
+      imgElem.file = file;
+
+      var reader = new FileReader();
+      reader.addEventListener('load', loadImgHandler(imgElem));
+      reader.readAsDataURL(file);
+    }
+  });
 })();
