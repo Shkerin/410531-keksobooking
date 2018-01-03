@@ -27,6 +27,8 @@
   var timeOutElem = formElem.querySelector('#timeout');
   var roomElem = formElem.querySelector('#room_number');
   var capacityElem = formElem.querySelector('#capacity');
+  var descriptionElem = formElem.querySelector('#description');
+
 
   var syncValues = function (element, value) {
     element.value = value;
@@ -53,14 +55,14 @@
 
   // Сбросить значения у всех полей формы
   var resetFormFields = function () {
-    formElem.querySelector('#title').value = '';
-    formElem.querySelector('#type').value = 'flat';
-    formElem.querySelector('#price').value = '1000';
-    formElem.querySelector('#timein').value = '12:00';
-    formElem.querySelector('#timeout').value = '12:00';
-    formElem.querySelector('#room_number').value = 1;
-    formElem.querySelector('#capacity').value = 3;
-    formElem.querySelector('#description').value = '';
+    titleElem.value = '';
+    typeElem.value = 'flat';
+    priceElem.value = '1000';
+    timeInElem.value = '12:00';
+    timeOutElem.value = '12:00';
+    roomElem.value = 1;
+    capacityElem.value = 3;
+    descriptionElem.value = '';
 
     formElem.querySelector('#feature-wifi').checked = false;
     formElem.querySelector('#feature-dishwasher').checked = false;
@@ -68,6 +70,12 @@
     formElem.querySelector('#feature-washer').checked = false;
     formElem.querySelector('#feature-elevator').checked = false;
     formElem.querySelector('#feature-conditioner').checked = false;
+
+    formElem.querySelector('.notice__preview img').src = 'img/muffin.png';
+    var pictures = formElem.querySelector('.form__photo-container .popup__pictures');
+    if (pictures) {
+      pictures.parentElement.removeChild(pictures);
+    }
   };
 
   // Валидация полей формы
@@ -136,23 +144,63 @@
     };
   };
 
+  // Загрузка изображения аватара пользователя
   var avatarElem = formElem.querySelector('#avatar');
   avatarElem.addEventListener('change', function (evt) {
+    evt.preventDefault();
+
     var files = evt.target.files;
+    if (!files.length) {
+      return;
+    }
 
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
+    var file = files[0];
+    if (!file.type.startsWith('image/')) {
+      return;
+    }
 
+    var imgElem = formElem.querySelector('.notice__preview img');
+    imgElem.file = file;
+
+    var reader = new FileReader();
+    reader.addEventListener('load', loadImgHandler(imgElem));
+    reader.readAsDataURL(file);
+  });
+
+  // Загрузка фотографий жилья
+  var imagesElem = formElem.querySelector('#images');
+  imagesElem.addEventListener('change', function (evt) {
+    evt.preventDefault();
+
+    var files = evt.target.files;
+    if (!files.length) {
+      return;
+    }
+
+    var picturesElem = document.querySelector('.form__photo-container .popup__pictures');
+    if (!picturesElem) {
+      picturesElem = document.createElement('ul');
+      picturesElem.classList.add('popup__pictures');
+
+      var uploadElem = document.querySelector('.form__photo-container .upload');
+      uploadElem.appendChild(picturesElem);
+    }
+
+    [].forEach.call(files, function (file) {
       if (!file.type.startsWith('image/')) {
-        continue;
+        return;
       }
 
-      var imgElem = formElem.querySelector('.notice__preview img');
+      var imgElem = document.createElement('img');
       imgElem.file = file;
 
-      var reader = new FileReader();
-      reader.addEventListener('load', loadImgHandler(imgElem));
-      reader.readAsDataURL(file);
-    }
+      var listElem = document.createElement('li');
+      listElem.appendChild(imgElem);
+      picturesElem.appendChild(listElem);
+
+      var render = new FileReader();
+      render.addEventListener('load', loadImgHandler(imgElem));
+      render.readAsDataURL(file);
+    });
   });
 })();

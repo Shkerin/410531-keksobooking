@@ -726,9 +726,31 @@ textarea:focus
     color: #ff5635;
 }
 
-.form__photo-container
+.form__photo-container .drop-zone
 {
     width: 140px;
+}
+
+.form__photo-container .popup__pictures
+{
+    display: flex;
+    flex-wrap: wrap;
+
+    width: 330px;
+    padding: 0;
+    margin: 0;
+}
+
+.form__photo-container li
+{
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+.form__photo-container img
+{
+    width: 100px;
+    height: 100px;
 }
 
 .form__element--submit
