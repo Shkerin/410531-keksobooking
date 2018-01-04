@@ -68,11 +68,18 @@
       renderPins(sourcePins);
     };
 
-    window.backend.loadData(loadHandler, window.error.show);
+    var createPins = function () {
+      var pins = window.data.create(8);
+      loadHandler(pins);
+    };
+
+    // window.backend.loadData(loadHandler, window.error.show);
+    createPins();
   };
 
   window.pins = {
-    render: loadAndRender,
+    loadAndRender: loadAndRender,
+    render: renderPins,
     update: update
   };
 })();

@@ -26,7 +26,7 @@
     noticeHeaderElem.removeAttribute('disabled');
     utils.removeAttributeAll('.form__element', 'disabled');
 
-    window.pins.render();
+    window.pins.loadAndRender();
 
     pinMainElem.removeEventListener('mouseup', showMapHandler);
   };

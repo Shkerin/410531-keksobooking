@@ -127,7 +127,10 @@
     resetStyle();
 
     if (validationForm()) {
-      backend.saveDate(new FormData(formElem), function () {}, window.error.show);
+      var pin = window.data.create(1);
+      window.pins.render(pin);
+
+      // backend.saveDate(new FormData(formElem), function () {}, window.error.show);
     }
   });
 
