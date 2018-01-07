@@ -11,6 +11,10 @@
   var sourcePins = [];
   var filterPins = [];
 
+  var addPin = function (pin) {
+    sourcePins.push(pin);
+  };
+
   var clickPinHandler = function (evt) {
     var elem = evt.currentTarget;
     window.displayCard.show(elem, filterPins);
@@ -42,8 +46,7 @@
   var renderPins = function (pins) {
     var frag = document.createDocumentFragment();
 
-    pins.forEach(function (value, idx) {
-      value.uid = idx;
+    pins.forEach(function (value) {
       var pinElem = createPinElem(value);
       frag.appendChild(pinElem);
 
@@ -68,18 +71,18 @@
       renderPins(sourcePins);
     };
 
-    var createPins = function () {
+    if (window.backend.hostReachable()) {
+      window.backend.loadData(loadHandler, window.error.show);
+    } else {
       var pins = window.data.create(8);
       loadHandler(pins);
-    };
-
-    // window.backend.loadData(loadHandler, window.error.show);
-    createPins();
+    }
   };
 
   window.pins = {
     loadAndRender: loadAndRender,
     render: renderPins,
-    update: update
+    update: update,
+    add: addPin
   };
 })();

@@ -29,7 +29,6 @@
   var capacityElem = formElem.querySelector('#capacity');
   var descriptionElem = formElem.querySelector('#description');
 
-
   var syncValues = function (element, value) {
     element.value = value;
   };
@@ -41,7 +40,7 @@
   var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
   window.synchronizeFields(roomElem, capacityElem, ROOMS, capacities, syncValues, false);
 
-  // Сбросить стили для всех полей формы
+  // Сброс стилей для всех полей формы
   var resetStyle = function () {
     titleElem.style = BORDER_VALID_STYLE;
     addressElem.style = BORDER_VALID_STYLE;
@@ -53,7 +52,7 @@
     capacityElem.style = BORDER_VALID_STYLE;
   };
 
-  // Сбросить значения у всех полей формы
+  // Сброс значений у всех полей формы
   var resetFormFields = function () {
     titleElem.value = '';
     typeElem.value = 'flat';
@@ -121,16 +120,69 @@
     return result;
   };
 
+  // Создание объекта пина
+  var createPin = function () {
+    var pattern = /\d{1,}/g;
+
+    var getFeatures = function () {
+      return ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'].filter(function (value) {
+        return formElem.querySelector('#feature-' + value).checked;
+      });
+    };
+
+    var getPhotos = function () {
+      var photos = [];
+
+      var picturesElem = document.querySelector('.form__photo-container .popup__pictures');
+      if (picturesElem) {
+        var imgElems = picturesElem.querySelectorAll('img');
+        [].forEach.call(imgElems, function (value) {
+          photos.push(value.src);
+        });
+      }
+
+      return photos;
+    };
+
+    return {
+      'uid': utils.createUUID(),
+      'author': {
+        'avatar': formElem.querySelector('.notice__preview img').src
+      },
+      'offer': {
+        'title': titleElem.value,
+        'address': addressElem.value.match(pattern)[0] + ', ' + addressElem.value.match(pattern)[1],
+        'price': priceElem.value,
+        'type': typeElem.value,
+        'rooms': roomElem.value,
+        'guests': capacityElem.value,
+        'checkin': timeInElem.value,
+        'checkout': timeOutElem.value,
+        'features': getFeatures(),
+        'description': descriptionElem.value,
+        'photos': getPhotos()
+      },
+      'location': {
+        'x': addressElem.value.match(pattern)[0],
+        'y': addressElem.value.match(pattern)[1]
+      }
+    };
+  };
+
   formElem.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
     resetStyle();
 
     if (validationForm()) {
-      var pin = window.data.create(1);
-      window.pins.render(pin);
-
-      // backend.saveDate(new FormData(formElem), function () {}, window.error.show);
+      if (backend.hostReachable()) {
+        backend.saveDate(new FormData(formElem), function () {
+        }, window.error.show);
+      } else {
+        var pin = createPin();
+        window.pins.add(pin);
+        window.pins.render([pin]);
+      }
     }
   });
 
