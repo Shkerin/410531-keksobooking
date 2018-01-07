@@ -22,14 +22,24 @@
   };
 
   var showCard = function (elem, mapPins) {
-    var data = elem.dataset;
+    var getPinForUid = function () {
+      var uid = elem.dataset.uid;
+      for (var i = 0; i < mapPins.length; i++) {
+        if (mapPins[i].uid === uid) {
+          return mapPins[i];
+        }
+      }
+      throw new Error('Pin not found for uuid: ' + uid);
+    };
+
+    var pin = getPinForUid();
     if (mapPinActive) {
       var popupElem = document.querySelector('.popup');
       popupElem.classList.remove('hidden');
-      card.update(popupElem, mapPins[data.uid]);
+      card.update(popupElem, pin);
       mapPinActive.classList.remove('map__pin--active');
     } else {
-      card.render(mapPins[data.uid]);
+      card.render(pin);
     }
     elem.classList.add('map__pin--active');
     mapPinActive = elem;

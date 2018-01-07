@@ -7,13 +7,23 @@
 (function () {
   var utils = window.utils;
 
-  var getRandomValueFromArray = function (array) {
-    if (!(array instanceof Array)) {
-      throw new TypeError('Exception of computing a random value: argument function is not array');
-    }
+  var TITLES = [
+    'Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
+    'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
+    'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'
+  ];
 
-    if (!array.length) {
-      return;
+  var TYPES = [
+    'flat', 'house', 'bungalo'
+  ];
+
+  var FEATURES = [
+    'wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'
+  ];
+
+  var getRandomValueFromArray = function (array) {
+    if (!(array instanceof Array) || !array.length) {
+      throw new TypeError('Exception of computing a random value');
     }
 
     var idx = utils.getRandomInt(0, array.length - 1);
@@ -31,37 +41,23 @@
       numbers.push(i + 1);
     }
 
-    var titles = [
-      'Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
-      'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
-      'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'
-    ];
-
-    var types = [
-      'flat', 'house', 'bungalo'
-    ];
-
-    var features = [
-      'wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'
-    ];
-
     var getRandomAvatar = function () {
       return 'img/avatars/user0' + getRandomValueFromArray(numbers) + '.png';
     };
 
     var getRandomTitle = function () {
-      return getRandomValueFromArray(titles);
+      return getRandomValueFromArray(TITLES);
     };
 
     var getType = function () {
-      return types[utils.getRandomInt(0, types.length - 1)];
+      return TYPES[utils.getRandomInt(0, TYPES.length - 1)];
     };
 
     var getFeature = function () {
       var newFeatures = [];
 
-      var copyFeatures = features.slice();
-      var rand = utils.getRandomInt(features.length - 1);
+      var copyFeatures = FEATURES.slice();
+      var rand = utils.getRandomInt(FEATURES.length - 1);
       for (var k = 0; k < rand; k++) {
         newFeatures.push(getRandomValueFromArray(copyFeatures));
       }
@@ -75,7 +71,7 @@
       var locationY = utils.getRandomInt(100, 500);
       var rooms = utils.getRandomInt(1, 5);
       mapPins.push({
-        'uid': j, // TODO replace to uid
+        'uid': utils.createUUID(),
         'author': {
           'avatar': getRandomAvatar()
         },
