@@ -42,8 +42,24 @@
     xhr.send(data);
   };
 
+  var hostReachable = function () {
+    var xhr = new XMLHttpRequest();
+
+    // Open new request as a HEAD to the root hostname with a random param to bust the cache
+    xhr.open('HEAD', '//' + window.location.hostname + '/?rand=' + Math.floor((1 + Math.random()) * 0x10000), false);
+
+    // Issue request and handle response
+    try {
+      xhr.send();
+      return (xhr.status >= 200 && (xhr.status < 300 || xhr.status === 304));
+    } catch (error) {
+      return false;
+    }
+  };
+
   window.backend = {
     loadData: load,
-    saveDate: upload
+    saveDate: upload,
+    hostReachable: hostReachable
   };
 })();
