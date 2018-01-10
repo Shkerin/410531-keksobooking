@@ -64,14 +64,17 @@
 
   var loadAndRender = function () {
     var loadHandler = function (data) {
-      sourcePins = data.filter(function (elem, idx) {
+      data.forEach(function (value) {
+        value.uid = window.utils.createUUID();
+      });
+      sourcePins = data.filter(function (value, idx) {
         return idx < 10;
       });
       filterPins = sourcePins;
       renderPins(sourcePins);
     };
 
-    if (window.backend.hostReachable()) {
+    if (navigator.onLine) {
       window.backend.loadData(loadHandler, window.error.show);
     } else {
       var pins = window.data.create(8);

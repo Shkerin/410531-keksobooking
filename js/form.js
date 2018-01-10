@@ -17,6 +17,7 @@
     'min': 30,
     'max': 100
   };
+  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
   var formElem = document.querySelector('.notice__form');
   var titleElem = formElem.querySelector('#title');
@@ -40,7 +41,6 @@
   var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
   window.synchronizeFields(roomElem, capacityElem, ROOMS, capacities, syncValues, false);
 
-  // Сброс стилей для всех полей формы
   var resetStyle = function () {
     titleElem.style = BORDER_VALID_STYLE;
     addressElem.style = BORDER_VALID_STYLE;
@@ -52,7 +52,6 @@
     capacityElem.style = BORDER_VALID_STYLE;
   };
 
-  // Сброс значений у всех полей формы
   var resetFormFields = function () {
     titleElem.value = '';
     typeElem.value = 'flat';
@@ -77,7 +76,6 @@
     }
   };
 
-  // Валидация полей формы
   var validationForm = function () {
     var result = true;
 
@@ -120,12 +118,11 @@
     return result;
   };
 
-  // Создание объекта пина
   var createPin = function () {
     var pattern = /\d{1,}/g;
 
     var getFeatures = function () {
-      return ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'].filter(function (value) {
+      return FEATURES.filter(function (value) {
         return formElem.querySelector('#feature-' + value).checked;
       });
     };
@@ -175,14 +172,12 @@
     resetStyle();
 
     if (validationForm()) {
-      if (backend.hostReachable()) {
-        backend.saveDate(new FormData(formElem), function () {
-        }, window.error.show);
-      } else {
-        var pin = createPin();
-        window.pins.add(pin);
-        window.pins.render([pin]);
+      if (navigator.onLine) {
+        backend.saveDate(new FormData(formElem), function () {}, window.error.show);
       }
+      var pin = createPin();
+      window.pins.add(pin);
+      window.pins.render([pin]);
     }
   });
 
