@@ -74,11 +74,11 @@
       renderPins(sourcePins);
     };
 
-    if (navigator.onLine) {
-      window.backend.loadData(loadHandler, window.error.show);
-    } else {
+    if (!navigator.onLine && window.consts.CREATE_PINS_WITHOUT_INTERNET) {
       var pins = window.data.create(8);
       loadHandler(pins);
+    } else {
+      window.backend.loadData(loadHandler, window.error.show);
     }
   };
 

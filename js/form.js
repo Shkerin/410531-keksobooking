@@ -41,6 +41,7 @@
   var capacities = [1, utils.getRandomInt(1, 2), utils.getRandomInt(1, 3), 0];
   window.synchronizeFields(roomElem, capacityElem, ROOMS, capacities, syncValues, false);
 
+  // Сброс стилей для всех полей формы
   var resetStyle = function () {
     titleElem.style = BORDER_VALID_STYLE;
     addressElem.style = BORDER_VALID_STYLE;
@@ -52,6 +53,7 @@
     capacityElem.style = BORDER_VALID_STYLE;
   };
 
+  // Сброс значений у всех полей формы
   var resetFormFields = function () {
     titleElem.value = '';
     typeElem.value = 'flat';
@@ -76,6 +78,7 @@
     }
   };
 
+  // Валидация полей формы
   var validationForm = function () {
     var result = true;
 
@@ -118,6 +121,7 @@
     return result;
   };
 
+  // Создание объекта пина
   var createPin = function () {
     var pattern = /\d{1,}/g;
 
@@ -160,8 +164,8 @@
         'photos': getPhotos()
       },
       'location': {
-        'x': addressElem.value.match(pattern)[0],
-        'y': addressElem.value.match(pattern)[1]
+        'x': +addressElem.value.match(pattern)[0] + 19,
+        'y': +addressElem.value.match(pattern)[1] - 23
       }
     };
   };
@@ -172,12 +176,13 @@
     resetStyle();
 
     if (validationForm()) {
+      backend.saveDate(new FormData(formElem), function () {}, window.error.show);
+
       if (navigator.onLine) {
-        backend.saveDate(new FormData(formElem), function () {}, window.error.show);
+        var pin = createPin();
+        window.pins.add(pin);
+        window.pins.render([pin]);
       }
-      var pin = createPin();
-      window.pins.add(pin);
-      window.pins.render([pin]);
     }
   });
 
