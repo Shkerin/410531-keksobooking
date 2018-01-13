@@ -22,17 +22,16 @@
   ];
 
   var getRandomValueFromArray = function (array) {
-    if (!(array instanceof Array) || !array.length) {
-      throw new TypeError('Exception of computing a random value');
+    if (!(array instanceof Array)) {
+      throw new TypeError('Exception of computing a random value: parameter is not array');
+    }
+    var arrLength = array.length;
+    if (!arrLength) {
+      throw new TypeError('Exception of computing a random value: array is empty');
     }
 
-    var idx = utils.getRandomInt(0, array.length - 1);
-    var val = array[idx];
-    if (array.length > 0) {
-      array.splice(idx, 1);
-    }
-
-    return val;
+    var idx = utils.getRandomInt(0, arrLength - 1);
+    return array.splice(idx, 1)[0];
   };
 
   var createPins = function (numPins) {

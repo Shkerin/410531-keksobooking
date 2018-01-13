@@ -44,6 +44,6 @@
 
   window.backend = {
     loadData: load,
-    saveDate: upload
+    saveData: upload
   };
 })();

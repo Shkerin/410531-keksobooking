@@ -176,13 +176,15 @@
     resetStyle();
 
     if (validationForm()) {
-      backend.saveDate(new FormData(formElem), function () {}, window.error.show);
-
       if (navigator.onLine) {
-        var pin = createPin();
-        window.pins.add(pin);
-        window.pins.render([pin]);
+        var emptyFunction = function () {
+          // empty
+        };
+        backend.saveData(new FormData(formElem), emptyFunction, window.error.show);
       }
+      var pin = createPin();
+      window.pins.add(pin);
+      window.pins.render([pin]);
     }
   });
 
