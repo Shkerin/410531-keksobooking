@@ -177,10 +177,7 @@
 
     if (validationForm()) {
       if (navigator.onLine) {
-        var emptyFunction = function () {
-          // empty
-        };
-        backend.saveData(new FormData(formElem), emptyFunction, window.error.show);
+        backend.saveData(new FormData(formElem), null, window.error.show);
       }
       var pin = createPin();
       window.pins.add(pin);

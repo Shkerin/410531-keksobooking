@@ -13,12 +13,16 @@
     xhr.responseType = consts.RESPONSE_TYPE;
     xhr.timeout = consts.TIMEOUT;
 
-    xhr.addEventListener('load', function () {
-      loadHandler(xhr.response);
-    });
-    xhr.addEventListener('error', function () {
-      errorHandler(errorMsg);
-    });
+    if (loadHandler) {
+      xhr.addEventListener('load', function () {
+        loadHandler(xhr.response);
+      });
+    }
+    if (errorHandler) {
+      xhr.addEventListener('error', function () {
+        errorHandler(errorMsg);
+      });
+    }
     xhr.addEventListener('timeout', function () {
       errorHandler('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
     });
@@ -34,9 +38,9 @@
     xhr.send();
   };
 
-  var upload = function (data, loadHandler, errorHandler) {
+  var upload = function (data, upLoadHandler, errorHandler) {
     var errorMsg = 'Произошла ошибка при отправке данных';
-    var xhr = createHttpRequest(loadHandler, errorHandler, errorMsg);
+    var xhr = createHttpRequest(upLoadHandler, errorHandler, errorMsg);
 
     xhr.open('POST', consts.URL_UPLOAD);
     xhr.send(data);
